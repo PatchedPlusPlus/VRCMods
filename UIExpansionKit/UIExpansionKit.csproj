@@ -1,13 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net472</TargetFramework>
+        <TargetFramework>net48</TargetFramework>
         <VrcReferences>true</VrcReferences>
         <LangVersion>latest</LangVersion>
         <UseAltLibs>true</UseAltLibs>
         <AssemblyVersion>0.3.2.0</AssemblyVersion>
         <DefineConstants>CUSTOMIZED_MOD_INTERNAL</DefineConstants>
+        <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <WarningLevel>1</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
         <EmbeddedResource Include="modui.assetbundle" />
     </ItemGroup>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="Copy /Y &quot;$(TargetPath)&quot; &quot;$(SolutionDir)..\..\..\Dependencies&quot;" />
+    </Target>
 </Project>

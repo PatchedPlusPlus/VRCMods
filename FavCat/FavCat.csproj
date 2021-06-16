@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VrcReferences>true</VrcReferences>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
@@ -35,6 +35,8 @@
       <InputAssemblies Include="$(OutputPath)/System.Runtime.CompilerServices.Unsafe.dll" />
 
       <IlRepackLibs Include="$(OutputPath)" />
+      <IlRepackLibs Include="$(MsBuildThisFileDirectory)../../../../Dependencies/Melonloader/Managed" />
+      <IlRepackLibs Include="$(MsBuildThisFileDirectory)../../../../Dependencies/Melonloader" />
       <IlRepackLibs Include="$(MsBuildThisFileDirectory)/../Libs" />
     </ItemGroup>
     <Message Text="MERGING: @(InputAssemblies->'%(Filename)') into $(OutputAssembly)" Importance="High" />

@@ -11,7 +11,7 @@ abstract class CustomizedMelonMod : MelonMod
 {
     static CustomizedMelonMod()
     {
-        LoaderIntegrityCheck.CheckIntegrity();
+        //LoaderIntegrityCheck.CheckIntegrity();
     }
 
     protected void DoAfterUiManagerInit(Action code)
