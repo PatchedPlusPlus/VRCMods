@@ -138,42 +138,42 @@
         <Reference Include="Rug.Osc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)Libs\Rug.Osc.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\Rug.Osc.dll</HintPath>
         </Reference>
         <Reference Include="UniTask, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)Libs\UniTask.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\UniTask.dll</HintPath>
         </Reference>
         <Reference Include="VRC.Udon, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)Libs\VRC.Udon.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\VRC.Udon.dll</HintPath>
         </Reference>
         <Reference Include="VRC.Udon.Common, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)Libs\VRC.Udon.Common.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\VRC.Udon.Common.dll</HintPath>
         </Reference>
         <Reference Include="VRC.Udon.ClientBindings, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)Libs\VRC.Udon.ClientBindings.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\VRC.Udon.ClientBindings.dll</HintPath>
         </Reference>
         <Reference Include="VRC.Udon.Wrapper, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)Libs\VRC.Udon.Wrapper.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\VRC.Udon.Wrapper.dll</HintPath>
         </Reference>
         <Reference Include="VRCSDK3, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)Libs\VRCSDK3.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\VRCSDK3.dll</HintPath>
         </Reference>
         <Reference Include="Il2CppSystem.Collections.Immutable, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)Libs\Il2CppSystem.Collections.Immutable.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\Il2CppSystem.Collections.Immutable.dll</HintPath>
         </Reference>
     </ItemGroup>
 
