@@ -1,5 +1,5 @@
 <Project>
-    <ItemGroup>
+    <ItemGroup Condition="'$(NoModReferences)' != 'true'">
         <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
@@ -99,7 +99,7 @@
     <ItemGroup>
         <Compile Include="$(MsBuildThisFileDirectory)/Common/CustomizedMelonMod.cs" Link="Common/CustomizedMelonMod.cs" />
     </ItemGroup>
-    <ItemGroup>
+    <ItemGroup Condition="'$(NoModReferences)' != 'true'">
         <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
