@@ -96,9 +96,6 @@
             <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\Il2CppSystem.Core.dll</HintPath>
         </Reference>
     </ItemGroup>
-    <ItemGroup>
-        <Compile Include="$(MsBuildThisFileDirectory)/Common/CustomizedMelonMod.cs" Link="Common/CustomizedMelonMod.cs" />
-    </ItemGroup>
     <ItemGroup Condition="'$(NoModReferences)' != 'true'">
         <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>

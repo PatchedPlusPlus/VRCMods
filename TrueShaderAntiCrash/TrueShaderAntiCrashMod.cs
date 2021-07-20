@@ -12,7 +12,7 @@ using UIExpansionKit.API;
 using UnityEngine.SceneManagement;
 using VRC.Core;
 
-[assembly:MelonInfo(typeof(TrueShaderAntiCrashMod), "True Shader Anticrash", "1.0.2", "knah", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(TrueShaderAntiCrashMod), "True Shader Anticrash", "1.0.2", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace TrueShaderAntiCrash
@@ -42,7 +42,7 @@ namespace TrueShaderAntiCrash
             foreach (ProcessModule module in process.Modules)
             {
                 if (!module.FileName.Contains("UnityPlayer")) continue;
-                
+
                 var loadLibraryAddress = module.BaseAddress + 0x819130;
                 var dg = Marshal.GetDelegateForFunctionPointer<FindAndLoadUnityPlugin>(loadLibraryAddress);
 
@@ -64,7 +64,7 @@ namespace TrueShaderAntiCrash
             }
 
             var category = MelonPreferences.CreateCategory("True Shader Anticrash");
-            
+
             var loopsEnabled = category.CreateEntry("LimitLoops", true, "Limit loops");
             var geometryEnabled = category.CreateEntry("LimitGeometry", true, "Limit geometry shaders");
             var tessEnabled = category.CreateEntry("LimitTesselation", true, "Limit tesselation");
@@ -75,7 +75,7 @@ namespace TrueShaderAntiCrash
             {
                 while (RoomManager.field_Internal_Static_ApiWorldInstance_0 == null)
                     yield return null;
-                
+
                 UpdateLimiters();
             }
 
@@ -96,7 +96,7 @@ namespace TrueShaderAntiCrash
                         return;
                     }
                 }
-                
+
                 ShaderFilterApi.SetFilteringState(loopsEnabled.Value, geometryEnabled.Value, tessEnabled.Value);
             }
 
@@ -109,25 +109,25 @@ namespace TrueShaderAntiCrash
 
             var maxGeometry = category.CreateEntry("MaxGeometryOutputs", 60, "Max geometry shader outputs");
             maxGeometry.OnValueChanged += (_, value) => ShaderFilterApi.SetLoopLimit(value);
-            
+
             var maxTess = category.CreateEntry("MaxTesselation", 5f, "Max tesselation power");
             maxTess.OnValueChanged += (_, value) => ShaderFilterApi.SetMaxTesselationPower(value);
 
             var enabledForWorlds = category.CreateEntry("DisableDuringWorldLoad", true, "Try to avoid affecting world shaders");
             enabledInPublicsOnly = category.CreateEntry("EnabledInPublicsOnly", false, "Only enabled in public instances");
-            
+
             SceneManager.add_sceneLoaded(new Action<Scene, LoadSceneMode>((sc, _) =>
             {
                 if (sc.buildIndex == -1)
                     UpdateLimiters();
             }));
-            
+
             SceneManager.add_sceneUnloaded(new Action<Scene>(_ =>
             {
                 if (enabledForWorlds.Value)
                     ShaderFilterApi.SetFilteringState(false, false, false);
             }));
-            
+
             UpdateLimiters();
             ShaderFilterApi.SetMaxTesselationPower(maxTess.Value);
             ShaderFilterApi.SetLoopLimit(maxLoopIterations.Value);
@@ -135,7 +135,7 @@ namespace TrueShaderAntiCrash
 
             if (MelonHandler.Mods.Any(it =>
                 it.Assembly.GetName().Name == "UIExpansionKit" &&
-                it.Assembly.GetName().Version >= new Version(0, 2, 4))) 
+                it.Assembly.GetName().Version >= new Version(0, 2, 4)))
                 AddNewUixProperties(category.Identifier);
         }
 

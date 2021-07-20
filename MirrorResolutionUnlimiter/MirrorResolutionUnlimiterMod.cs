@@ -8,7 +8,7 @@ using UnhollowerRuntimeLib;
 using UnityEngine;
 using VRC.SDKBase;
 
-[assembly:MelonInfo(typeof(MirrorResolutionUnlimiterMod), "MirrorResolutionUnlimiter", "1.1.3", "knah", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(MirrorResolutionUnlimiterMod), "MirrorResolutionUnlimiter", "1.1.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 [assembly:MelonOptionalDependencies("UIExpansionKit")]
 
@@ -17,7 +17,7 @@ namespace MirrorResolutionUnlimiter
     internal partial class MirrorResolutionUnlimiterMod : MelonMod
     {
         internal const string ModCategory = "MirrorResolutionUnlimiter";
-        
+
         private const string MaxResPref = "MaxEyeTextureResolution";
         private const string MirrorMsaaPref = "MirrorMsaa";
         private const string AllMirrorsAutoPref = "AllMirrorsUseAutoRes";
@@ -53,7 +53,7 @@ namespace MirrorResolutionUnlimiter
             var forceAutoRes = category.CreateEntry(AllMirrorsAutoPref, false, "Force auto resolution");
             forceAutoRes.OnValueChanged += (_, v) => ourAllMirrorsAuto = v;
             ourAllMirrorsAuto = forceAutoRes.Value;
-            
+
             myPixelLightsSetting = category.CreateEntry(PixelLightsSetting, "default", "Pixel lights in mirrors");
             myPixelLightsSetting.OnValueChangedUntyped += UpdateMirrorPixelLights;
 
@@ -73,7 +73,7 @@ namespace MirrorResolutionUnlimiter
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
             if (buildIndex != -1) return;
-            
+
             foreach (var mirror in Resources.FindObjectsOfTypeAll<VRC_MirrorReflection>())
             {
                 var store = mirror.gameObject.GetComponent<OriginalPixelLightsSettingKeeper>() ??

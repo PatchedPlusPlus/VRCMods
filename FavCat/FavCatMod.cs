@@ -61,7 +61,17 @@ namespace FavCat
             
             DoAfterUiManagerInit(OnUiManagerInit);
         }
+        private static void DoAfterUiManagerInit(Action code)
+        {
+            MelonCoroutines.Start(OnUiManagerInitCoro(code));
+        }
 
+        private static IEnumerator OnUiManagerInitCoro(Action code)
+        {
+            while (VRCUiManager.prop_VRCUiManager_0 == null)
+                yield return null;
+            code();
+        }
         private static void AvatarPedestalPatch(ApiContainer __0)
         {
             if (__0.Code != 200) return;

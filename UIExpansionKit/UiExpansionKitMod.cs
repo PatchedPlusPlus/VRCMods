@@ -15,7 +15,7 @@ using VRC.UserCamera;
 using VRCSDK2;
 using Object = UnityEngine.Object;
 
-[assembly:MelonInfo(typeof(UiExpansionKitMod), "UI Expansion Kit", "0.3.3", "knah", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(UiExpansionKitMod), "UI Expansion Kit", "0.3.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace UIExpansionKit
@@ -23,7 +23,7 @@ namespace UIExpansionKit
     internal partial class UiExpansionKitMod : MelonMod
     {
         internal static UiExpansionKitMod Instance;
-        
+
         private PreloadedBundleContents myStuffBundle;
 
         private GameObject myModSettingsExpando;
@@ -33,7 +33,7 @@ namespace UIExpansionKit
         private GameObject myInputPopup;
         private GameObject myInputKeypadPopup;
         internal Transform myCameraExpandoRoot;
-        
+
         private static readonly List<(ExpandedMenu, string, bool isFullMenu)> GameObjectToCategoryList = new List<(ExpandedMenu, string, bool)>
         {
             (ExpandedMenu.AvatarMenu, "UserInterface/MenuContent/Screens/Avatar", true),
@@ -43,7 +43,7 @@ namespace UIExpansionKit
             (ExpandedMenu.WorldDetailsMenu, "UserInterface/MenuContent/Screens/WorldInfo", true),
             (ExpandedMenu.UserDetailsMenu, "UserInterface/MenuContent/Screens/UserInfo", true),
             (ExpandedMenu.SocialMenu, "UserInterface/MenuContent/Screens/Social", true),
-            
+
             (ExpandedMenu.QuickMenu, "UserInterface/QuickMenu/ShortcutMenu", false),
             (ExpandedMenu.UserQuickMenu, "UserInterface/QuickMenu/UserInteractMenu", false),
             (ExpandedMenu.EmojiQuickMenu, "UserInterface/QuickMenu/EmojiMenu", false),
@@ -54,13 +54,13 @@ namespace UIExpansionKit
             (ExpandedMenu.AvatarStatsQuickMenu, "UserInterface/QuickMenu/AvatarStatsMenu", false),
             (ExpandedMenu.InvitesTab, "UserInterface/QuickMenu/QuickModeMenus/QuickModeNotificationsMenu", false),
         };
-        
+
         private readonly Dictionary<ExpandedMenu, GameObject> myMenuRoots = new();
         private readonly Dictionary<ExpandedMenu, GameObject> myVisibilitySources = new();
         private readonly Dictionary<ExpandedMenu, bool> myHasContents = new();
 
         public PreloadedBundleContents StuffBundle => myStuffBundle;
-        
+
         internal static bool AreSettingsDirty = false;
 
         public override void OnApplicationStart()
@@ -69,7 +69,7 @@ namespace UIExpansionKit
             ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();
             ClassInjector.RegisterTypeInIl2Cpp<DestroyListener>();
             ClassInjector.RegisterTypeInIl2Cpp<CameraExpandoHandler>();
-            
+
             ExpansionKitSettings.RegisterSettings();
             ExpansionKitSettings.PinsEntry.OnValueChangedUntyped += UpdateQuickMenuPins;
             MelonCoroutines.Start(InitThings());
@@ -101,17 +101,17 @@ namespace UIExpansionKit
 
             while (QuickMenu.prop_QuickMenu_0 == null)
                 yield return null;
-            
+
             {
                 using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("UIExpansionKit.modui.assetbundle");
                 using var memStream = new MemoryStream((int) stream.Length);
                 stream.CopyTo(memStream);
                 var assetBundle = AssetBundle.LoadFromMemory_Internal(memStream.ToArray(), 0);
                 assetBundle.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-                
+
                 myStuffBundle = new PreloadedBundleContents(assetBundle);
             }
-            
+
             // attach it to QuickMenu. VRChat changes render queue on QM contents on world load that makes it render properly
             myStuffBundle.StoredThingsParent.transform.SetParent(QuickMenu.prop_QuickMenu_0.transform);
 
@@ -151,7 +151,7 @@ namespace UIExpansionKit
 
             myInputPopup = GameObject.Find("UserInterface/MenuContent/Popups/InputPopup");
             myInputKeypadPopup = GameObject.Find("UserInterface/MenuContent/Popups/InputKeypadPopup");
-            
+
             // Wait an extra frame to ve very sure that all other mods had the chance to register buttons in their wait-for-ui-manager coroutine
             yield return null;
 
@@ -164,7 +164,7 @@ namespace UIExpansionKit
 
             GameObject.Find("UserInterface/QuickMenu/QuickMenu_NewElements/_Background")
                 .AddComponent<EnableDisableListener>().OnDisabled += BuiltinUiUtils.InvokeQuickMenuClosed;
-            
+
             GameObject.Find("UserInterface/MenuContent/Backdrop/Backdrop")
                 .AddComponent<EnableDisableListener>().OnDisabled += BuiltinUiUtils.InvokeFullMenuClosed;
 
@@ -176,13 +176,13 @@ namespace UIExpansionKit
         private void DecorateMenuPages()
         {
             MelonLogger.Msg("Decorating menus");
-            
+
             var quickMenuExpandoPrefab = myStuffBundle.QuickMenuExpando;
             var quickMenuRoot = QuickMenu.prop_QuickMenu_0.gameObject;
-            
+
             var fullMenuExpandoPrefab = myStuffBundle.BigMenuExpando;
             var fullMenuRoot = VRCUiManager.prop_VRCUiManager_0.field_Public_GameObject_0;
-            
+
             foreach (var valueTuple in GameObjectToCategoryList)
             {
                 var categoryEnum = valueTuple.Item1;
@@ -195,7 +195,7 @@ namespace UIExpansionKit
                     MelonLogger.Error($"GameObject at path {gameObjectPath} for category {categoryEnum} was not found, not decorating");
                     continue;
                 }
-                
+
                 myVisibilitySources[categoryEnum] = gameObject;
 
                 if (isBigMenu)
@@ -217,7 +217,7 @@ namespace UIExpansionKit
                         if (categoryEnum == ExpandedMenu.AvatarMenu)
                             gameObject.transform.Find("AvatarPreviewBase").gameObject.SetActive(!willBeRight);
                     }));
-                    
+
                     var listener = gameObject.GetOrAddComponent<EnableDisableListener>();
                     listener.OnEnabled += () =>
                     {
@@ -246,9 +246,9 @@ namespace UIExpansionKit
                     content.gameObject.AddComponent<VRC_UiShape>();
                     var toggle = toggleButton.GetComponent<Toggle>();
 
-                    if (ExpansionKitSettings.IsQmExpandoStartsCollapsed()) 
+                    if (ExpansionKitSettings.IsQmExpandoStartsCollapsed())
                         toggle.isOn = false;
-                    
+
                     var listener = gameObject.GetOrAddComponent<EnableDisableListener>();
                     listener.OnEnabled += () =>
                     {
@@ -256,17 +256,17 @@ namespace UIExpansionKit
                         BuiltinUiUtils.InvokeMenuOpened(categoryEnum);
                     };
                     listener.OnDisabled += () => expando.SetActive(false);
-                    
+
                     FillQuickMenuExpando(expando, categoryEnum);
 
                     expando.GetOrAddComponent<EnableDisableListener>().OnEnabled += () =>
                     {
                         MelonCoroutines.Start(ResizeExpandoAfterDelay(expando, toggle.isOn));
                     };
-                    
+
                     SetLayerRecursively(expando, quickMenuRoot.layer);
                 }
-                
+
                 UpdateCategoryVisibility(valueTuple.Item1);
             }
         }
@@ -279,9 +279,9 @@ namespace UIExpansionKit
                 MelonLogger.Warning("Camera controller not found, not decorating the camera");
                 return;
             }
-            
+
             var cameraTransform = cameraController.transform.Find("ViewFinder");
-            
+
             var expando = Object.Instantiate(myStuffBundle.QuickMenuExpando, cameraTransform, false);
             myMenuRoots[ExpandedMenu.Camera] = expando;
 
@@ -300,7 +300,7 @@ namespace UIExpansionKit
             toggleButton.localPosition += Vector3.left * 60;
             var toggleComponent = toggleButton.GetComponent<Toggle>();
 
-            if (ExpansionKitSettings.IsCameraExpandoStartsCollapsed()) 
+            if (ExpansionKitSettings.IsCameraExpandoStartsCollapsed())
                 toggleComponent.isOn = false;
 
             var listener = cameraTransform.gameObject.GetOrAddComponent<EnableDisableListener>();
@@ -345,14 +345,14 @@ namespace UIExpansionKit
                 if (o.Cast<Transform>().gameObject.activeSelf)
                     totalButtons++;
             }
-            
+
             var targetRows = ExpansionKitSettings.ClampQuickMenuExpandoRowCount((totalButtons + 3) / 4);
             var expandoRectTransform = expando.transform.Cast<RectTransform>();
             var oldPosition = expandoRectTransform.anchoredPosition;
             expandoRectTransform.sizeDelta = new Vector2(expandoRectTransform.sizeDelta.x, 100 * targetRows + 5);
             expandoRectTransform.anchoredPosition = oldPosition;
             expando.transform.Find("Content").GetComponent<VRC_UiShape>().Awake(); // adjust the box collider for raycasts
-            
+
             expando.transform.Find("Content").gameObject.SetActive(totalButtons != 0 && contentsCanBeVisible);
             expando.transform.Find("QuickMenuExpandoToggle").gameObject.SetActive(totalButtons != 0);
         }
@@ -362,7 +362,7 @@ namespace UIExpansionKit
             var expandoRoot = expando.transform.Find("Content").Cast<RectTransform>();
 
             myHasContents[categoryEnum] = false;
-            
+
             expandoRoot.DestroyChildren();
 
             if (ExpansionKitApi.ExpandedMenus.TryGetValue(categoryEnum, out var registrations))
@@ -408,21 +408,21 @@ namespace UIExpansionKit
 
             Object.Destroy(myModSettingsExpandoTransform.Find("Content/ApplyButton").gameObject);
             Object.Destroy(myModSettingsExpandoTransform.Find("Content/RefreshButton").gameObject);
-            
+
             SetLayerRecursively(myModSettingsExpando, mySettingsPage.gameObject.layer);
         }
 
         internal static void SetLayerRecursively(GameObject obj, int layer)
         {
             obj.layer = layer;
-            foreach (var o in obj.transform) 
+            foreach (var o in obj.transform)
                 SetLayerRecursively(o.Cast<Transform>().gameObject, layer);
         }
 
         private void FillQuickMenuExpando(GameObject expando, ExpandedMenu expandedMenu)
         {
             var expandoRoot = expando.transform.Find("Content/Scroll View/Viewport/Content").Cast<RectTransform>();
-            
+
             expandoRoot.DestroyChildren();
 
             var toggleButtonPrefab = myStuffBundle.QuickMenuToggle;
@@ -464,11 +464,11 @@ namespace UIExpansionKit
                     {
                         boolEntry.OnValueChanged -= handler;
                     };
-                    
+
                     myHasContents[expandedMenu] = true;
                 }
             }
-            
+
             DoResizeExpando(expando, expando.transform.Find("QuickMenuExpandoToggle").GetComponent<Toggle>().isOn);
         }
 

@@ -6,7 +6,7 @@ using VRC.SDKBase;
 using VRC.UserCamera;
 
 [assembly:MelonGame("VRChat", "VRChat")]
-[assembly:MelonInfo(typeof(CameraMinusMod), "CameraMinus", "2.0.0", "knah", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(CameraMinusMod), "CameraMinus", "2.0.0", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 
 namespace CameraMinus
 {
@@ -23,10 +23,10 @@ namespace CameraMinus
 
             ExpansionKitApi.GetSettingsCategory("CameraMinus")
                 .AddLabel("Disable and enable camera to update camera expando visibility");
-            
+
             GameObject cameraButton = null;
             GameObject qmButton = null;
-            
+
             ExpansionKitApi.GetExpandedMenu(ExpandedMenu.Camera).AddSimpleButton("CameraMinus", ShowCustomMenu, go =>
             {
                 cameraButton = go;
@@ -67,7 +67,7 @@ namespace CameraMinus
             var customMenu = myUseCameraExpando.Value
                 ? ExpansionKitApi.CreateCustomCameraExpandoPage(LayoutDescription.QuickMenu3Columns)
                 : ExpansionKitApi.CreateCustomQuickMenuPage(LayoutDescription.QuickMenu3Columns);
-            
+
             customMenu.AddToggleButton("Camera lens visible", ToggleLens, GetLensState);
             customMenu.AddSimpleButton("Enlarge camera", Enlarge);
             customMenu.AddSimpleButton("Shrink camera", Shrink);
@@ -79,7 +79,7 @@ namespace CameraMinus
             customMenu.AddSpacer();
             customMenu.AddSpacer();
             customMenu.AddSimpleButton("Back", () => customMenu.Hide());
-            
+
             customMenu.Show();
         }
 
@@ -89,7 +89,7 @@ namespace CameraMinus
             if (cameraController == null) return;
             cameraController.transform.Find("ViewFinder").localScale *= 1.5f;
         }
-        
+
         private void Shrink()
         {
             var cameraController = UserCameraController.field_Internal_Static_UserCameraController_0;
@@ -110,7 +110,7 @@ namespace CameraMinus
         {
             var cameraController = UserCameraController.field_Internal_Static_UserCameraController_0;
             if (cameraController == null) return true;
-            
+
             var lensMesh = cameraController.transform.Find("PhotoCamera/camera_lens_mesh");
             return lensMesh.gameObject.activeSelf;
         }

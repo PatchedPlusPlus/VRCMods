@@ -13,7 +13,7 @@ using VRC.Core;
 using Object = UnityEngine.Object;
 
 [assembly: MelonGame("VRChat", "VRChat")]
-[assembly: MelonInfo(typeof(ParticleAndBoneLimiterSettingsMod), "Particle and DynBone limiter settings UI", "1.1.4", "knah", "https://github.com/knah/VRCMods")]
+[assembly: MelonInfo(typeof(ParticleAndBoneLimiterSettingsMod), "Particle and DynBone limiter settings UI", "1.1.4", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 
 namespace ParticleAndBoneLimiterSettings
 {
@@ -21,7 +21,7 @@ namespace ParticleAndBoneLimiterSettings
     {
         private const string SettingsCategory = "VrcParticleLimiter";
         private static bool ourIsExpanded;
-        
+
         public override void OnApplicationStart()
         {
             ClassInjector.RegisterTypeInIl2Cpp<CustomParticleSettingsUiHandler>();
@@ -82,16 +82,16 @@ namespace ParticleAndBoneLimiterSettings
                 expandButtonText.text = expanded ? "^" : "V";
                 categoryUiContent.gameObject.SetActive(expanded);
             }
-                
+
             expandButton.onClick.AddListener(new Action(() =>
             {
                 SetExpanded(ourIsExpanded = !ourIsExpanded);
             }));
-            
+
             SetExpanded(ourIsExpanded);
 
             var textPrefab = CustomParticleSettingsUiHandler.UixBundle.SettingsText;
-            
+
             var boolSetting = Object.Instantiate(CustomParticleSettingsUiHandler.UixBundle.SettingsBool, categoryUiContent, false);
             boolSetting.GetComponentInChildren<Text>().text = "Enable particle limiter (restart required)";
             var mainToggle = boolSetting.transform.Find("Toggle").GetComponent<Toggle>();
@@ -107,7 +107,7 @@ namespace ParticleAndBoneLimiterSettings
                     }
                     else
                         list.Remove("particle_system_limiter");
-                    
+
                     var newList = new Il2CppSystem.Collections.Generic.List<Il2CppSystem.Object>();
                     foreach (var s in list) newList.Add((Il2CppSystem.String) s);
                     localConfig.SetValue("betas", newList);
@@ -139,7 +139,7 @@ namespace ParticleAndBoneLimiterSettings
                         (result, _, __) => textField.text = result);
                 }));
             }
-            
+
             var reloadButton = Object.Instantiate(CustomParticleSettingsUiHandler.UixBundle.QuickMenuButton, categoryUiContent, false);
             var reloadButtonText = reloadButton.GetComponentInChildren<Text>();
             reloadButtonText.text = "Click to apply limits and reload all avatars (particle limits need world rejoin)";
@@ -151,7 +151,7 @@ namespace ParticleAndBoneLimiterSettings
                 ReloadAllAvatars();
             }));
         }
-        
+
         private static void ReloadAllAvatars() {
             // reloadAllAvatars
             var vrcPlayer = VRCPlayer.field_Internal_Static_VRCPlayer_0;

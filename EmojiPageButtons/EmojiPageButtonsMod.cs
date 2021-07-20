@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-[assembly:MelonInfo(typeof(EmojiPageButtonsMod), "Emoji Page Buttons", "1.0.2", "knah", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(EmojiPageButtonsMod), "Emoji Page Buttons", "1.0.2", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace EmojiPageButtons
@@ -32,7 +32,7 @@ namespace EmojiPageButtons
             }
 
             var emojiMenu = emojiMenuRoot.GetComponent<EmojiMenu>();
-            
+
             var storeGo = new GameObject("ClonedPageStore");
             storeGo.transform.SetParent(emojiMenu.transform);
             storeGo.SetActive(false);
@@ -49,7 +49,7 @@ namespace EmojiPageButtons
                 grid.startAxis = GridLayoutGroup.Axis.Horizontal;
                 grid.startCorner = GridLayoutGroup.Corner.UpperLeft;
                 grid.constraintCount = 3;
-                
+
                 foreach (var buttonXformObject in pageGo.transform)
                 {
                     var buttonTransform = buttonXformObject.Cast<Transform>();
@@ -79,12 +79,12 @@ namespace EmojiPageButtons
             {
                 if (component.TryCast<Image>() != null || component.TryCast<Text>() != null)
                     continue;
-                
+
                 if (component.TryCast<Button>() != null || component.TryCast<MonoBehaviour>() != null)
                     Object.Destroy(component);
             }
-            
-            foreach (var o in obj.transform) 
+
+            foreach (var o in obj.transform)
                 CleanStuff(o.Cast<Transform>().gameObject);
         }
     }

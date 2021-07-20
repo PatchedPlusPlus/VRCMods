@@ -11,7 +11,7 @@ using UnhollowerRuntimeLib.XrefScans;
 using UnityEngine;
 using VRC.Core;
 
-[assembly:MelonInfo(typeof(FriendsPlusHomeMod), "Friends+ Home", "1.1.1", "knah", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(FriendsPlusHomeMod), "Friends+ Home", "1.1.1", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 [assembly:MelonOptionalDependencies("UIExpansionKit")]
 
@@ -32,22 +32,31 @@ namespace FriendsPlusHome
             StartupName = category.CreateEntry(SettingStartupName, nameof(InstanceAccessType.FriendsOfGuests), "Startup instance type");
             ButtonName = category.CreateEntry(SettingButtonName, nameof(InstanceAccessType.FriendsOfGuests), "\"Go Home\" instance type");
 
-            if (MelonHandler.Mods.Any(it => it.Info.Name == "UI Expansion Kit" && !it.Info.Version.StartsWith("0.1."))) 
+            if (MelonHandler.Mods.Any(it => it.Info.Name == "UI Expansion Kit" && !it.Info.Version.StartsWith("0.1.")))
                 RegisterUix2Extension();
 
             foreach (var methodInfo in typeof(VRCFlowManager).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly))
             {
-                if (methodInfo.ReturnType != typeof(void) || methodInfo.GetParameters().Length != 0) 
+                if (methodInfo.ReturnType != typeof(void) || methodInfo.GetParameters().Length != 0)
                     continue;
-                
-                if (!XrefScanner.XrefScan(methodInfo).Any(it => it.Type == XrefType.Global && it.ReadAsObject()?.ToString() == "Going to Home Location: ")) 
+
+                if (!XrefScanner.XrefScan(methodInfo).Any(it => it.Type == XrefType.Global && it.ReadAsObject()?.ToString() == "Going to Home Location: "))
                     continue;
-                
+
                 MelonLogger.Msg($"Patched {methodInfo.Name}");
                 HarmonyInstance.Patch(methodInfo, postfix: new HarmonyMethod(AccessTools.Method(typeof(FriendsPlusHomeMod), nameof(GoHomePatch))));
             }
-            
+
             DoAfterUiManagerInit(OnUiManagerInit);
+        }
+        private static void DoAfterUiManagerInit(Action code) {
+            MelonCoroutines.Start(OnUiManagerInitCoro(code));
+        }
+
+        private static IEnumerator OnUiManagerInitCoro(Action code) {
+            while (VRCUiManager.prop_VRCUiManager_0 == null)
+                yield return null;
+            code();
         }
 
         private void OnUiManagerInit()
@@ -83,9 +92,9 @@ namespace FriendsPlusHome
 
             MelonCoroutines.Start(EnforceTargetInstanceType(flowManager, targetType, isButton ? 10 : 30));
         }
-        
+
         private static int ourRequestId;
-        
+
         private static IEnumerator EnforceTargetInstanceType(VRCFlowManager manager, InstanceAccessType type, float time)
         {
             var endTime = Time.time + time;

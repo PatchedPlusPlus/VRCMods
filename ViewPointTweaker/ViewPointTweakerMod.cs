@@ -12,8 +12,12 @@ using UnhollowerBaseLib.Attributes;
 using UnityEngine;
 using UnityEngine.UI;
 using ViewPointTweaker;
+using System;
+using System.Runtime.InteropServices;
+using Object = UnityEngine.Object;
 
-[assembly:MelonInfo(typeof(ViewPointTweakerMod), "View Point Tweaker", "1.0.3", "knah", "https://github.com/knah/VRCMods")]
+
+[assembly:MelonInfo(typeof(ViewPointTweakerMod), "View Point Tweaker", "1.0.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace ViewPointTweaker
@@ -21,7 +25,7 @@ namespace ViewPointTweaker
     internal partial class ViewPointTweakerMod : MelonMod
     {
         private const string ViewPointsFilePath = "UserData/ViewPoints.json";
-        
+
         private static Vector3 ourCurrentDefaultOffset;
         private static Transform ourCurrentHeadOffsetTransform;
         private static Dictionary<string, (float X, float Y, float Z)> ourSavedViewpoints =
@@ -29,9 +33,22 @@ namespace ViewPointTweaker
 
         private static VRCVrCameraSteam ourSteamCamera;
         private static Transform ourCameraTransform;
-        
+
         private bool myHighPrecisionMoves;
-        
+
+
+        private static void DoAfterUiManagerInit(Action code)
+        {
+            MelonCoroutines.Start(OnUiManagerInitCoro(code));
+        }
+
+        private static IEnumerator OnUiManagerInitCoro(Action code)
+        {
+            while (VRCUiManager.prop_VRCUiManager_0 == null)
+                yield return null;
+            code();
+        }
+
         public override void OnApplicationStart()
         {
             ExpansionKitApi.GetExpandedMenu(ExpandedMenu.UiElementsQuickMenu).AddSimpleButton("Tweak view point", ShowViewpointMenu);
@@ -44,9 +61,7 @@ namespace ViewPointTweaker
                     postfix: new HarmonyMethod(AccessTools.Method(typeof(ViewPointTweakerMod),
                         nameof(HeadAlignmentInitPatch))));
             }
-            
             LoadViewpoints();
-            
             DoAfterUiManagerInit(OnUiManagerInit);
         }
 
@@ -62,7 +77,7 @@ namespace ViewPointTweaker
 
                 return;
             }
-            
+
             MelonLogger.Error("Steam tracking not found, things will break");
         }
 
@@ -77,7 +92,7 @@ namespace ViewPointTweaker
 
             var json = File.ReadAllText(ViewPointsFilePath);
             JSON.MakeInto(JSON.Load(json), out ourSavedViewpoints);
-            
+
             MelonLogger.Msg($"Loaded {ourSavedViewpoints.Count} saved viewpoints");
         }
 
@@ -90,12 +105,12 @@ namespace ViewPointTweaker
                 return;
 
             var avatarManager = localPlayer.prop_VRCAvatarManager_0;
-            if (avatarManager == null) return; 
-            
+            if (avatarManager == null) return;
+
             var xform = __instance.transform;
             ourCurrentDefaultOffset = xform.localPosition;
             ourCurrentHeadOffsetTransform = xform;
-            
+
             MelonDebug.Msg($"avatar id: {avatarManager.prop_ApiAvatar_0?.id}");
 
             var avatarId = avatarManager.prop_ApiAvatar_0?.id;
@@ -106,7 +121,7 @@ namespace ViewPointTweaker
                 SetViewPointOffset(offset);
                 MelonCoroutines.Start(SetOffsetAgainLater(offset));
             }
-            
+
             MelonDebug.Msg("Head alignment set hook");
         }
 
@@ -114,7 +129,7 @@ namespace ViewPointTweaker
         {
             for (var i = 0; i < 3; i++)
                 yield return null;
-            
+
             SetViewPointOffset(offset);
         }
 
@@ -146,7 +161,7 @@ namespace ViewPointTweaker
                     {
                         MelonDebug.Msg("Menu closed, cleaning up");
                         Object.Destroy(ball);
-                        
+
                         var avatarId = VRCPlayer.field_Internal_Static_VRCPlayer_0.prop_VRCAvatarManager_0.prop_ApiAvatar_0.id;
                         var localPosition = ourCurrentHeadOffsetTransform.localPosition;
 
@@ -172,7 +187,7 @@ namespace ViewPointTweaker
                 yLabel.text = $"Y:\n{localPosition.y:F3}";
                 zLabel.text = $"Z:\n{localPosition.z:F3}";
             }
-            
+
             menu.AddSimpleButton("Up", () => DoMove(Vector3.up));
             menu.AddSimpleButton("Forward", () => DoMove(Vector3.forward));
             menu.AddSimpleButton("Left", () => DoMove(Vector3.left));
@@ -196,9 +211,9 @@ namespace ViewPointTweaker
             menu.AddSpacer();
             menu.AddSpacer();
             menu.AddSimpleButton("Back", menu.Hide);
-            
+
             menu.Show();
-            
+
             DoMove(Vector3.zero);
         }
     }

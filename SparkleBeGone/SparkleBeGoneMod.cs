@@ -10,7 +10,7 @@ using UnhollowerRuntimeLib;
 using UnityEngine;
 
 [assembly:MelonGame("VRChat", "VRChat")]
-[assembly:MelonInfo(typeof(SparkleBeGoneMod), "SparkleBeGone", "1.1.0", "knah", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(SparkleBeGoneMod), "SparkleBeGone", "1.1.0", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 
 namespace SparkleBeGone
 {
@@ -26,7 +26,7 @@ namespace SparkleBeGone
         private static Color ourBeamColor;
         private static bool ourDoRecolorSparks;
         private static bool ourDoRecolorBeams;
-        
+
         private static VRCSpaceUiPointer ourLeftPointer;
         private static VRCSpaceUiPointer ourRightPointer;
         private static readonly int ourTintColor = Shader.PropertyToID("_TintColor");
@@ -38,15 +38,15 @@ namespace SparkleBeGone
         public override void OnApplicationStart()
         {
             var category = MelonPreferences.CreateCategory("SparkleBeGone", "Sparkle Be Gone");
-            
+
             ourStartSparkle = category.CreateEntry("StartSparkle", false, "Show start sparkle");
             ourEndSparkle = category.CreateEntry("EndSparks", false, "Show end sparks");
             ourEndFlare = category.CreateEntry("EndFlare", true, "Show end flare");
-            
+
             var recolorSparks = category.CreateEntry("RecolorSparks", false, "Recolor sparks");
             var recolorBeams = category.CreateEntry("RecolorBeams", true, "Recolor beams");
             var beamColor = category.CreateEntry("BeamColor", "25 50 255 255", "Beam color (r g b a)");
-            
+
             recolorSparks.OnValueChanged += (_, value) => ourDoRecolorSparks = value;
             recolorBeams.OnValueChanged += (_, value) =>
             {
@@ -95,14 +95,14 @@ namespace SparkleBeGone
             if (split.Length > 1) int.TryParse(split[1], out green);
             if (split.Length > 2) int.TryParse(split[2], out blue);
             if (split.Length > 3) int.TryParse(split[3], out alpha);
-            
+
             return new Color(red / 255f, green / 255f, blue / 255f, alpha / 255f);
         }
 
         private void UpdateBeamTextures()
         {
             if (ourLeftPointer == null) return;
-            
+
             if (myOriginalLaserTexture == null)
             {
                 myOriginalLaserTexture = ourLeftPointer.GetComponent<LineRenderer>().material.mainTexture.Cast<Texture2D>();
@@ -117,7 +117,7 @@ namespace SparkleBeGone
         public void UpdateParticleSystems()
         {
             if (ourLeftPointer == null) return;
-            
+
             AdjustParticleSystems(ourLeftPointer.gameObject);
             AdjustParticleSystems(ourRightPointer.gameObject);
         }
@@ -127,7 +127,7 @@ namespace SparkleBeGone
             try
             {
                 ourOriginalLateUpdate(thisPtr);
-                
+
                 if (ourLeftPointer == null) return;
 
                 VRCSpaceUiPointer pointer = null;
@@ -147,7 +147,7 @@ namespace SparkleBeGone
                 }
 
                 if (!ourDoRecolorBeams) return;
-                
+
                 var lineRenderer = pointer.field_Public_LineRenderer_0;
                 if (lineRenderer != null)
                     lineRenderer.startColor = lineRenderer.endColor = ourBeamColor;
@@ -161,12 +161,12 @@ namespace SparkleBeGone
         private IEnumerator InitThings()
         {
             while (VRCUiCursorManager.field_Private_Static_VRCUiCursorManager_0 == null) yield return null;
-            
+
             var cursorManager = VRCUiCursorManager.field_Private_Static_VRCUiCursorManager_0;
 
             ourLeftPointer = cursorManager.transform.Find("LeftHandBeam").GetComponent<VRCSpaceUiPointer>();
             ourRightPointer = cursorManager.transform.Find("RightHandBeam").GetComponent<VRCSpaceUiPointer>();
-            
+
             UpdateBeamTextures();
             UpdateParticleSystems();
         }
@@ -176,9 +176,9 @@ namespace SparkleBeGone
             var startParticle = cursorRoot.transform.Find("plasma_beam_muzzle_blue");
             var endFlare = cursorRoot.transform.Find("plasma_beam_flare_blue");
             var endSparks = endFlare.Find("plasma_beam_spark_002");
-            
-            startParticle.GetComponent<ParticleSystem>().enableEmission = ourStartSparkle.Value; 
-            endFlare.GetComponent<ParticleSystem>().enableEmission = ourEndFlare.Value; 
+
+            startParticle.GetComponent<ParticleSystem>().enableEmission = ourStartSparkle.Value;
+            endFlare.GetComponent<ParticleSystem>().enableEmission = ourEndFlare.Value;
             endSparks.GetComponent<ParticleSystem>().enableEmission = ourEndSparkle.Value;
         }
     }

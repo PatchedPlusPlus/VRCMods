@@ -28,7 +28,7 @@ using System.Globalization;
 
 // using CameraUtil = ObjectPublicCaSiVeUnique;
 
-[assembly:MelonInfo(typeof(LagFreeScreenshotsMod), "Lag Free Screenshots", "1.2.3", "knah, Protected", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(LagFreeScreenshotsMod), "Lag Free Screenshots", "1.2.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace LagFreeScreenshots
@@ -60,17 +60,17 @@ namespace LagFreeScreenshots
             ourAutorotation = category.CreateEntry(SettingAutorotation, true, "Rotate picture to match camera");
             ourMetadata = category.CreateEntry(SettingMetadata, false, "Save metadata in picture");
             ourRecommendedMaxFb = category.CreateEntry("RecommendedMaximumFb", 1024, "Try to keep framebuffer below (MB) by reducing MSAA");
-            
+
             if (!MelonHandler.Mods.Any(it => it.Info.Name == "UI Expansion Kit" && it.Assembly.GetName().Version >= new Version(0, 2, 6)))
             {
                 MelonLogger.Error("UI Expansion Kit is not found. Lag Free Screenshots will not work.");
                 return;
-            } 
+            }
 
             HarmonyInstance.Patch(
                 typeof(CameraTakePhotoEnumerator).GetMethod("MoveNext"),
                 new HarmonyMethod(AccessTools.Method(typeof(LagFreeScreenshotsMod), nameof(MoveNextPatchAsyncReadback))));
-            
+
             AddEnumSettings();
         }
 
@@ -113,7 +113,7 @@ namespace LagFreeScreenshots
                                        viewPos.y.ToString("0.00", CultureInfo.InvariantCulture) + "," +
                                        viewPos.z.ToString("0.00", CultureInfo.InvariantCulture) + "," +
                                        p.prop_APIUser_0.displayName;
-                
+
                 if (viewPos.z < 2 && Vector3.Distance(localPosition, playerPosition) < 2)
                 {
                     //User standing right next to photographer, might be visible (approx.)
@@ -155,12 +155,12 @@ namespace LagFreeScreenshots
             var resY = __instance.field_Public_Int32_1;
             var saveToFile = __instance.field_Public_Boolean_0;
             var hasAlpha = __instance.field_Public_Boolean_1;
-            
+
             MelonDebug.Msg($"LFS bools: 0={__instance.field_Public_Boolean_0} 1={__instance.field_Public_Boolean_1}");
-            
+
             if (!ourEnabled.Value || !saveToFile)
                 return true;
-            
+
             ourMainThread = Thread.CurrentThread;
 
             __result = false;
@@ -191,7 +191,7 @@ namespace LagFreeScreenshots
 
             return (int) maxMsaa;
         }
-        
+
         public static async Task TakeScreenshot(Camera camera, int w, int h, bool hasAlpha)
         {
             await TaskUtilities.YieldToFrameEnd();
@@ -204,7 +204,7 @@ namespace LagFreeScreenshots
             var oldCameraFov = camera.fieldOfView;
 
             camera.targetTexture = renderTexture;
-            
+
             camera.Render();
 
             camera.targetTexture = oldCameraTarget;
@@ -215,23 +215,23 @@ namespace LagFreeScreenshots
             if (readbackSupported)
             {
                 MelonDebug.Msg("Supports readback");
-                
+
                 var stopwatch = Stopwatch.StartNew();
                 var request = AsyncGPUReadback.Request(renderTexture, 0, hasAlpha ? TextureFormat.ARGB32 : TextureFormat.RGB24, new Action<AsyncGPUReadbackRequest>(r =>
                 {
                     if (r.hasError)
                         MelonLogger.Warning("Readback request finished with error (w)");
-                    
+
                     data = ToBytes(r.GetDataRaw(0), r.GetLayerDataSize());
                     MelonDebug.Msg($"Bytes readback took total {stopwatch.ElapsedMilliseconds}");
                 }));
-                
+
                 while (!request.done && !request.hasError && data.Item1 == IntPtr.Zero)
                     await TaskUtilities.YieldToMainThread();
 
                 if (request.hasError)
                     MelonLogger.Warning("Readback request finished with error");
-                
+
                 if (data.Item1 == IntPtr.Zero)
                 {
                     MelonDebug.Msg("Data was null after request was done, waiting more");
@@ -241,7 +241,7 @@ namespace LagFreeScreenshots
             else
             {
                 MelonLogger.Msg("Does not support readback, using fallback texture read method");
-                
+
                 RenderTexture.active = renderTexture;
                 var newTexture = new Texture2D(w, h, hasAlpha ? TextureFormat.ARGB32 : TextureFormat.RGB24, false);
                 newTexture.ReadPixels(new Rect(0, 0, w, h), 0, 0);
@@ -251,10 +251,10 @@ namespace LagFreeScreenshots
                 var bytes = newTexture.GetRawTextureData();
                 data = (Marshal.AllocHGlobal(bytes.Length), bytes.Length);
                 Il2CppSystem.Runtime.InteropServices.Marshal.Copy(bytes, 0, data.Item1, bytes.Length);
-                
+
                 Object.Destroy(newTexture);
             }
-            
+
             Object.Destroy(renderTexture);
 
             var targetFile = GetPath(w, h);
@@ -264,8 +264,8 @@ namespace LagFreeScreenshots
 
             string metadataStr = null;
             int rotationQuarters = 0;
-            
-            if (ourAutorotation.Value) 
+
+            if (ourAutorotation.Value)
                 rotationQuarters = GetPictureAutorotation(camera);
 
             if (ourMetadata.Value)
@@ -282,16 +282,16 @@ namespace LagFreeScreenshots
             await EncodeAndSavePicture(targetFile, data, w, h, hasAlpha, rotationQuarters, metadataStr)
                 .ConfigureAwait(false);
         }
-        
+
         private static unsafe (IntPtr, int) ToBytes(IntPtr pointer, int length)
         {
             var data = Marshal.AllocHGlobal(length);
-            
+
             Buffer.MemoryCopy((void*) pointer, (void*) data, length, length);
 
             return (data, length);
         }
-        
+
         private static ImageCodecInfo GetEncoder(ImageFormat format)
         {
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
@@ -357,10 +357,10 @@ namespace LagFreeScreenshots
             bool hasAlpha, int rotationQuarters, string description)
         {
             if (pixelsPair.Item1 == IntPtr.Zero) return;
-            
+
             // yield to background thread
             await Task.Delay(1).ConfigureAwait(false);
-            
+
             if (Thread.CurrentThread == ourMainThread)
                 MelonLogger.Error("Image encode is executed on main thread - it's a bug!");
 
@@ -470,13 +470,13 @@ namespace LagFreeScreenshots
 
             // compatibility with log-reading tools
             UnityEngine.Debug.Log($"Took screenshot to: {filePath}");
-            
+
             // yield to background thread for disposes
             await Task.Delay(1).ConfigureAwait(false);
         }
 
         private static Func<int, int, string> ourOurGetPathMethod;
-        
+
         static string GetPath(int w, int h)
         {
             ourOurGetPathMethod ??= (Func<int, int, string>) Delegate.CreateDelegate(typeof(Func<int, int, string>),

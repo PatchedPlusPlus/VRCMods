@@ -119,7 +119,7 @@ namespace Turbones
             DynamicBoneStartPatch = GetPointer<ComponentDelegate>(lib, nameof(DynamicBoneStartPatch));
             ResetParticlePositions = GetPointer<ComponentDelegate>(lib, nameof(ResetParticlePositions));
             
-            TurbonesMod.CheckA();
+            //TurbonesMod.CheckA();
 
             RegisterColliderForCollisionFeedback = GetPointer<RegisterColliderForCollisionFeedbackDelegate>(lib, nameof(RegisterColliderForCollisionFeedback));
             UnregisterColliderForCollisionFeedback = GetPointer<UnregisterColliderForCollisionFeedbackDelegate>(lib, nameof(UnregisterColliderForCollisionFeedback));
