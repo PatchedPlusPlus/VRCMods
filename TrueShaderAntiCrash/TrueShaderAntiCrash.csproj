@@ -6,11 +6,14 @@
         <Version>1.0.2.0</Version>
         <VrcReferences>true</VrcReferences>
         <AssemblyName>TrueShaderAntiCrash - Unchained</AssemblyName>
+<<<<<<< HEAD
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
       <DebugType>none</DebugType>
       <DebugSymbols>false</DebugSymbols>
+=======
+>>>>>>> 27bcc10359ee89245cfb82e058e6f7986e6f2da0
     </PropertyGroup>
 
     <ItemGroup>
