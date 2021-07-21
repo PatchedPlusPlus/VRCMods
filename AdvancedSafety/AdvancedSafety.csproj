@@ -6,6 +6,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
         <Version>1.5.5.0</Version>
+        <AssemblyName>AdvancedSafety - Unchained</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
