@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
+using System.IO;//[LargeHeader
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 using Object = UnityEngine.Object;
 
 
-[assembly:MelonInfo(typeof(ViewPointTweakerMod), "View Point Tweaker - Unchained", "1.0.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(ViewPointTweakerMod), "View Point Tweaker", "1.0.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace ViewPointTweaker

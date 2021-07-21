@@ -4,7 +4,7 @@
         <TargetFramework>net48</TargetFramework>
         <VrcReferences>true</VrcReferences>
         <Version>1.0.3.0</Version>
-        <AssemblyName>ViewPointTweaker-Unchained</AssemblyName>
+        <AssemblyName>ViewPointTweaker</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

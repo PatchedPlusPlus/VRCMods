@@ -8,7 +8,7 @@ using UnhollowerBaseLib;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-[assembly:MelonInfo(typeof(FinitizerMod), "Finitizer - Unchained", "1.3.1", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(FinitizerMod), "Finitizer", "1.3.1", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace Finitizer

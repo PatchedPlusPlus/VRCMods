@@ -11,7 +11,7 @@ using UnhollowerRuntimeLib.XrefScans;
 using UnityEngine;
 using VRC.Core;
 
-[assembly:MelonInfo(typeof(FriendsPlusHomeMod), "Friends+ Home - Unchained", "1.1.1", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(FriendsPlusHomeMod), "Friends+ Home", "1.1.1", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 [assembly:MelonOptionalDependencies("UIExpansionKit")]
 

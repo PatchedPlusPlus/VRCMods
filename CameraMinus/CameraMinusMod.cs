@@ -6,7 +6,7 @@ using VRC.SDKBase;
 using VRC.UserCamera;
 
 [assembly:MelonGame("VRChat", "VRChat")]
-[assembly:MelonInfo(typeof(CameraMinusMod), "CameraMinus - Unchained", "2.0.0", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(CameraMinusMod), "CameraMinus", "2.0.0", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 
 namespace CameraMinus
 {

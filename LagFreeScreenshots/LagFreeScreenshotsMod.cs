@@ -28,7 +28,7 @@ using System.Globalization;
 
 // using CameraUtil = ObjectPublicCaSiVeUnique;
 
-[assembly:MelonInfo(typeof(LagFreeScreenshotsMod), "Lag Free Screenshots - Unchained", "1.2.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(LagFreeScreenshotsMod), "Lag Free Screenshots", "1.2.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace LagFreeScreenshots

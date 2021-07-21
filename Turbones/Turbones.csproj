@@ -5,7 +5,7 @@
         <UseVrcReferences>true</UseVrcReferences>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Version>1.1.0.0</Version>
-        <AssemblyName>Turbones-Unchained</AssemblyName>
+        <AssemblyName>Turbones</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

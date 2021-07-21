@@ -15,7 +15,7 @@ using VRC.UserCamera;
 using VRCSDK2;
 using Object = UnityEngine.Object;
 
-[assembly:MelonInfo(typeof(UiExpansionKitMod), "UI Expansion Kit - Unchained", "0.3.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(UiExpansionKitMod), "UI Expansion Kit", "0.3.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace UIExpansionKit
