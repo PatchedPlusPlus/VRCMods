@@ -6,6 +6,11 @@
         <LangVersion>latest</LangVersion>
         <UseAltLibs>true</UseAltLibs>
         <AssemblyVersion>1.1.3.0</AssemblyVersion>
+        <AssemblyName>MirrorResolutionUnlimiter - Unchained</AssemblyName>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <DebugType>none</DebugType>
+      <DebugSymbols>false</DebugSymbols>
     </PropertyGroup>
     <ItemGroup>
       <ProjectReference Include="..\UIExpansionKit\UIExpansionKit.csproj">

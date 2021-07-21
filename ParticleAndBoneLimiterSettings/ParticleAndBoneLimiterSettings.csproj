@@ -4,6 +4,12 @@
         <TargetFramework>net48</TargetFramework>
         <VrcReferences>true</VrcReferences>
         <Version>1.1.4.0</Version>
+        <AssemblyName>ParticleAndBoneLimiterSettings - Unchained</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <DebugType>none</DebugType>
+      <DebugSymbols>false</DebugSymbols>
     </PropertyGroup>
 
     <ItemGroup>
