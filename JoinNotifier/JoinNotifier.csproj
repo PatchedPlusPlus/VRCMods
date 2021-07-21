@@ -5,14 +5,11 @@
     <VrcReferences>true</VrcReferences>
     <UseAltLibs>true</UseAltLibs>
     <AssemblyVersion>1.0.3</AssemblyVersion>
-    <AssemblyName>JoinNotifier - Unchained</AssemblyName>
-<<<<<<< HEAD
+    <AssemblyName>JoinNotifier-Unchained</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
-=======
->>>>>>> 27bcc10359ee89245cfb82e058e6f7986e6f2da0
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="joinnotifier.assetbundle" />

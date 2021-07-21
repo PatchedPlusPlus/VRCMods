@@ -6,15 +6,12 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>8</LangVersion>
         <Version>1.2.3.0</Version>
-        <AssemblyName>LagFreeScreenshots - Unchained</AssemblyName>
-<<<<<<< HEAD
+        <AssemblyName>LagFreeScreenshots-Unchained</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
       <DebugType>none</DebugType>
       <DebugSymbols>false</DebugSymbols>
-=======
->>>>>>> 27bcc10359ee89245cfb82e058e6f7986e6f2da0
     </PropertyGroup>
 
     <ItemGroup>

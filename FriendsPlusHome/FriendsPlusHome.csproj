@@ -4,15 +4,12 @@
         <TargetFramework>net48</TargetFramework>
         <VrcReferences>true</VrcReferences>
         <AssemblyVersion>1.1.1.0</AssemblyVersion>
-        <AssemblyName>FriendsPlusHome - Unchained</AssemblyName>
-<<<<<<< HEAD
+        <AssemblyName>FriendsPlusHome-Unchained</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
       <DebugType>none</DebugType>
       <DebugSymbols>false</DebugSymbols>
-=======
->>>>>>> 27bcc10359ee89245cfb82e058e6f7986e6f2da0
     </PropertyGroup>
 
     <ItemGroup>
