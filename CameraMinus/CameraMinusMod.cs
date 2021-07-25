@@ -4,16 +4,42 @@ using UIExpansionKit.API;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.UserCamera;
+using System;
+using System.Linq;
+using System.Reflection;
+
 
 [assembly:MelonGame("VRChat", "VRChat")]
 [assembly:MelonInfo(typeof(CameraMinusMod), "CameraMinus", "2.0.0", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 
 namespace CameraMinus
 {
-    internal partial class CameraMinusMod : MelonMod
+    internal class CameraMinusMod : MelonMod
     {
         private MelonPreferences_Entry<bool> myUseCameraExpando;
         private MelonPreferences_Entry<bool> myUnlimitCameraPickupDistance;
+
+
+
+        private static Func<VRCUiManager> ourGetUiManager;
+        private static Func<QuickMenu> ourGetQuickMenu;
+
+        static CameraMinusMod()
+        {
+
+            ourGetUiManager = (Func<VRCUiManager>)Delegate.CreateDelegate(typeof(Func<VRCUiManager>), typeof(VRCUiManager)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(VRCUiManager)).GetMethod);
+            ourGetQuickMenu = (Func<QuickMenu>)Delegate.CreateDelegate(typeof(Func<QuickMenu>), typeof(QuickMenu)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(QuickMenu)).GetMethod);
+
+        }
+
+        internal static VRCUiManager GetUiManager() => ourGetUiManager();
+        internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
+
+
 
         public override void OnApplicationStart()
         {

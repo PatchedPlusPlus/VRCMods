@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;//[LargeHeader
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
@@ -17,12 +17,12 @@ using System.Runtime.InteropServices;
 using Object = UnityEngine.Object;
 
 
-[assembly:MelonInfo(typeof(ViewPointTweakerMod), "View Point Tweaker", "1.0.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(ViewPointTweakerMod), "View Point Tweaker", "1.0.4", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace ViewPointTweaker
 {
-    internal partial class ViewPointTweakerMod : MelonMod
+    internal class ViewPointTweakerMod : MelonMod
     {
         private const string ViewPointsFilePath = "UserData/ViewPoints.json";
 
@@ -48,6 +48,25 @@ namespace ViewPointTweaker
                 yield return null;
             code();
         }
+
+
+        private static Func<VRCUiManager> ourGetUiManager;
+        private static Func<QuickMenu> ourGetQuickMenu;
+
+        static ViewPointTweakerMod()
+        {
+
+            ourGetUiManager = (Func<VRCUiManager>)Delegate.CreateDelegate(typeof(Func<VRCUiManager>), typeof(VRCUiManager)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(VRCUiManager)).GetMethod);
+            ourGetQuickMenu = (Func<QuickMenu>)Delegate.CreateDelegate(typeof(Func<QuickMenu>), typeof(QuickMenu)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(QuickMenu)).GetMethod);
+
+        }
+
+        internal static VRCUiManager GetUiManager() => ourGetUiManager();
+        internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
 
         public override void OnApplicationStart()
         {
@@ -111,9 +130,9 @@ namespace ViewPointTweaker
             ourCurrentDefaultOffset = xform.localPosition;
             ourCurrentHeadOffsetTransform = xform;
 
-            MelonDebug.Msg($"avatar id: {avatarManager.prop_ApiAvatar_0?.id}");
+            MelonDebug.Msg($"avatar id: {avatarManager.field_Private_ApiAvatar_1?.id}");
 
-            var avatarId = avatarManager.prop_ApiAvatar_0?.id;
+            var avatarId = avatarManager.field_Private_ApiAvatar_1?.id;
             if (avatarId == null) return;
             if (ourSavedViewpoints.TryGetValue(avatarId, out var triple))
             {
@@ -162,7 +181,7 @@ namespace ViewPointTweaker
                         MelonDebug.Msg("Menu closed, cleaning up");
                         Object.Destroy(ball);
 
-                        var avatarId = VRCPlayer.field_Internal_Static_VRCPlayer_0.prop_VRCAvatarManager_0.prop_ApiAvatar_0.id;
+                        var avatarId = VRCPlayer.field_Internal_Static_VRCPlayer_0.prop_VRCAvatarManager_0.field_Private_ApiAvatar_1.id;
                         var localPosition = ourCurrentHeadOffsetTransform.localPosition;
 
                         if (localPosition != ourCurrentDefaultOffset)

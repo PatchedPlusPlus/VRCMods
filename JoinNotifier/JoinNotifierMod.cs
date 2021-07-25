@@ -16,12 +16,12 @@ using VRC.Core;
 using VRC.Management;
 using Object = UnityEngine.Object;
 
-[assembly:MelonInfo(typeof(JoinNotifierMod), "JoinNotifier", "1.0.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(JoinNotifierMod), "JoinNotifier", "1.0.4", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace JoinNotifier
 {
-    internal partial class JoinNotifierMod : MelonMod
+    internal class JoinNotifierMod : MelonMod
     {
         private const string CustomJoinSoundFileName = "UserData/JN-Join.ogg";
         private const string CustomLeaveSoundFileName = "UserData/JN-Leave.ogg";
@@ -46,8 +46,32 @@ namespace JoinNotifier
 
         private AudioMixerGroup myUIGroup;
 
+
+
+        private static Func<VRCUiManager> ourGetUiManager;
+        private static Func<QuickMenu> ourGetQuickMenu;
+
+        static JoinNotifierMod()
+        {
+
+            ourGetUiManager = (Func<VRCUiManager>)Delegate.CreateDelegate(typeof(Func<VRCUiManager>), typeof(VRCUiManager)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(VRCUiManager)).GetMethod);
+            ourGetQuickMenu = (Func<QuickMenu>)Delegate.CreateDelegate(typeof(Func<QuickMenu>), typeof(QuickMenu)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(QuickMenu)).GetMethod);
+
+        }
+
+        internal static VRCUiManager GetUiManager() => ourGetUiManager();
+        internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
+
+
+
         public override void OnApplicationStart()
         {
+            //if (!CheckWasSuccessful || !MustStayTrue || MustStayFalse) return;
+
             JoinNotifierSettings.RegisterSettings();
 
             MelonCoroutines.Start(InitThings());
@@ -59,7 +83,7 @@ namespace JoinNotifier
 
             while (ReferenceEquals(NetworkManager.field_Internal_Static_NetworkManager_0, null)) yield return null;
             while (ReferenceEquals(VRCAudioManager.field_Private_Static_VRCAudioManager_0, null)) yield return null;
-            while (ReferenceEquals(VRCUiManager.prop_VRCUiManager_0, null)) yield return null;
+            while (ReferenceEquals(GetUiManager(), null)) yield return null;
 
             var audioManager = VRCAudioManager.field_Private_Static_VRCAudioManager_0;
 

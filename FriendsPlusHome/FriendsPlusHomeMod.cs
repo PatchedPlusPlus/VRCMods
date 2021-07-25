@@ -11,13 +11,13 @@ using UnhollowerRuntimeLib.XrefScans;
 using UnityEngine;
 using VRC.Core;
 
-[assembly:MelonInfo(typeof(FriendsPlusHomeMod), "Friends+ Home", "1.1.1", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(FriendsPlusHomeMod), "Friends+ Home", "1.1.2", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 [assembly:MelonOptionalDependencies("UIExpansionKit")]
 
 namespace FriendsPlusHome
 {
-    internal partial class FriendsPlusHomeMod : MelonMod
+    internal class FriendsPlusHomeMod : MelonMod
     {
         private const string SettingsCategory = "FriendsPlusHome";
         private const string SettingStartupName = "StartupWorldType";
@@ -25,6 +25,27 @@ namespace FriendsPlusHome
 
         private static MelonPreferences_Entry<string> StartupName;
         private static MelonPreferences_Entry<string> ButtonName;
+
+
+
+        private static Func<VRCUiManager> ourGetUiManager;
+        private static Func<QuickMenu> ourGetQuickMenu;
+
+        static FriendsPlusHomeMod()
+        {
+
+            ourGetUiManager = (Func<VRCUiManager>)Delegate.CreateDelegate(typeof(Func<VRCUiManager>), typeof(VRCUiManager)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(VRCUiManager)).GetMethod);
+            ourGetQuickMenu = (Func<QuickMenu>)Delegate.CreateDelegate(typeof(Func<QuickMenu>), typeof(QuickMenu)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(QuickMenu)).GetMethod);
+
+        }
+
+        internal static VRCUiManager GetUiManager() => ourGetUiManager();
+        internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
+
 
         public override void OnApplicationStart()
         {
@@ -61,7 +82,7 @@ namespace FriendsPlusHome
 
         private void OnUiManagerInit()
         {
-            StartEnforcingInstanceType(VRCFlowManager.prop_VRCFlowManager_0, false); // just in case startup is slow
+            StartEnforcingInstanceType(VRCFlowManager.field_Private_Static_VRCFlowManager_0, false); // just in case startup is slow
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

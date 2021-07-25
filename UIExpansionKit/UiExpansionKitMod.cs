@@ -14,13 +14,16 @@ using UnityEngine.UI;
 using VRC.UserCamera;
 using VRCSDK2;
 using Object = UnityEngine.Object;
+using HarmonyLib;
+using System.Runtime.InteropServices;
+
 
 [assembly:MelonInfo(typeof(UiExpansionKitMod), "UI Expansion Kit", "0.3.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace UIExpansionKit
 {
-    internal partial class UiExpansionKitMod : MelonMod
+    internal class UiExpansionKitMod : MelonMod
     {
         internal static UiExpansionKitMod Instance;
 
@@ -63,6 +66,27 @@ namespace UIExpansionKit
 
         internal static bool AreSettingsDirty = false;
 
+
+
+        private static Func<VRCUiManager> ourGetUiManager;
+        private static Func<QuickMenu> ourGetQuickMenu;
+
+        static UiExpansionKitMod()
+        {
+
+            ourGetUiManager = (Func<VRCUiManager>) Delegate.CreateDelegate(typeof(Func<VRCUiManager>), typeof(VRCUiManager)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(VRCUiManager)).GetMethod);
+            ourGetQuickMenu = (Func<QuickMenu>) Delegate.CreateDelegate(typeof(Func<QuickMenu>), typeof(QuickMenu)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(QuickMenu)).GetMethod);
+
+        }
+
+        internal static VRCUiManager GetUiManager() => ourGetUiManager();
+        internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
+
+
         public override void OnApplicationStart()
         {
             Instance = this;
@@ -96,10 +120,10 @@ namespace UIExpansionKit
 
         private IEnumerator InitThings()
         {
-            while (VRCUiManager.prop_VRCUiManager_0 == null)
+            while (GetUiManager() == null)
                 yield return null;
 
-            while (QuickMenu.prop_QuickMenu_0 == null)
+            while (GetQuickMenu() == null)
                 yield return null;
 
             {
@@ -113,7 +137,7 @@ namespace UIExpansionKit
             }
 
             // attach it to QuickMenu. VRChat changes render queue on QM contents on world load that makes it render properly
-            myStuffBundle.StoredThingsParent.transform.SetParent(QuickMenu.prop_QuickMenu_0.transform);
+            myStuffBundle.StoredThingsParent.transform.SetParent(GetQuickMenu().transform);
 
             var delegatesToInvoke = ExpansionKitApi.onUiManagerInitDelegateList;
             ExpansionKitApi.onUiManagerInitDelegateList = null;
@@ -178,11 +202,11 @@ namespace UIExpansionKit
             MelonLogger.Msg("Decorating menus");
 
             var quickMenuExpandoPrefab = myStuffBundle.QuickMenuExpando;
-            var quickMenuRoot = QuickMenu.prop_QuickMenu_0.gameObject;
-
+            var quickMenuRoot = GetQuickMenu().gameObject;
+            
             var fullMenuExpandoPrefab = myStuffBundle.BigMenuExpando;
-            var fullMenuRoot = VRCUiManager.prop_VRCUiManager_0.field_Public_GameObject_0;
-
+            var fullMenuRoot = GetUiManager().field_Public_GameObject_0;
+            
             foreach (var valueTuple in GameObjectToCategoryList)
             {
                 var categoryEnum = valueTuple.Item1;
@@ -387,7 +411,8 @@ namespace UIExpansionKit
 
         private void DecorateFullMenu()
         {
-            var fullMenuRoot = VRCUiManager.prop_VRCUiManager_0.field_Public_GameObject_0;
+            var fullMenuRoot = GetUiManager().field_Public_GameObject_0;
+            //CheckC();
 
             var settingsExpandoPrefab = myStuffBundle.SettingsMenuExpando;
             myModSettingsExpando = Object.Instantiate(settingsExpandoPrefab, fullMenuRoot.transform, false);

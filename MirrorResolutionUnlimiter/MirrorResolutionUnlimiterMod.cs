@@ -7,6 +7,8 @@ using MirrorResolutionUnlimiter;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using VRC.SDKBase;
+using System.Reflection;
+
 
 [assembly:MelonInfo(typeof(MirrorResolutionUnlimiterMod), "MirrorResolutionUnlimiter", "1.1.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
@@ -14,7 +16,7 @@ using VRC.SDKBase;
 
 namespace MirrorResolutionUnlimiter
 {
-    internal partial class MirrorResolutionUnlimiterMod : MelonMod
+    internal class MirrorResolutionUnlimiterMod : MelonMod
     {
         internal const string ModCategory = "MirrorResolutionUnlimiter";
 
@@ -29,6 +31,26 @@ namespace MirrorResolutionUnlimiter
         private static MelonPreferences_Entry<bool> ourMsaaIsUpperLimit;
 
         private MelonPreferences_Entry<string> myPixelLightsSetting;
+
+
+        private static Func<VRCUiManager> ourGetUiManager;
+        private static Func<QuickMenu> ourGetQuickMenu;
+
+        static MirrorResolutionUnlimiterMod()
+        {
+
+            ourGetUiManager = (Func<VRCUiManager>)Delegate.CreateDelegate(typeof(Func<VRCUiManager>), typeof(VRCUiManager)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(VRCUiManager)).GetMethod);
+            ourGetQuickMenu = (Func<QuickMenu>)Delegate.CreateDelegate(typeof(Func<QuickMenu>), typeof(QuickMenu)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(QuickMenu)).GetMethod);
+
+        }
+
+        internal static VRCUiManager GetUiManager() => ourGetUiManager();
+        internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
+
 
         public override void OnApplicationStart()
         {

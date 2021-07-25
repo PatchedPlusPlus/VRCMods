@@ -17,10 +17,30 @@ using Object = UnityEngine.Object;
 
 namespace ParticleAndBoneLimiterSettings
 {
-    internal partial class ParticleAndBoneLimiterSettingsMod : MelonMod
+    internal class ParticleAndBoneLimiterSettingsMod : MelonMod
     {
         private const string SettingsCategory = "VrcParticleLimiter";
         private static bool ourIsExpanded;
+
+
+
+        private static Func<VRCUiManager> ourGetUiManager;
+        private static Func<QuickMenu> ourGetQuickMenu;
+
+        static ParticleAndBoneLimiterSettingsMod()
+        {
+
+            ourGetUiManager = (Func<VRCUiManager>)Delegate.CreateDelegate(typeof(Func<VRCUiManager>), typeof(VRCUiManager)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(VRCUiManager)).GetMethod);
+            ourGetQuickMenu = (Func<QuickMenu>)Delegate.CreateDelegate(typeof(Func<QuickMenu>), typeof(QuickMenu)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(QuickMenu)).GetMethod);
+
+        }
+
+        internal static VRCUiManager GetUiManager() => ourGetUiManager();
+        internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
 
         public override void OnApplicationStart()
         {

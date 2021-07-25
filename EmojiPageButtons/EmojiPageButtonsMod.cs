@@ -6,14 +6,40 @@ using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
+using System;
+using System.Linq;
+using System.Reflection;
 
-[assembly:MelonInfo(typeof(EmojiPageButtonsMod), "Emoji Page Buttons", "1.0.2", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+
+[assembly:MelonInfo(typeof(EmojiPageButtonsMod), "Emoji Page Buttons", "1.0.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace EmojiPageButtons
 {
-    internal partial class EmojiPageButtonsMod : MelonMod
+    internal class EmojiPageButtonsMod : MelonMod
     {
+
+
+        private static Func<VRCUiManager> ourGetUiManager;
+        private static Func<QuickMenu> ourGetQuickMenu;
+
+        static EmojiPageButtonsMod()
+        {
+
+            ourGetUiManager = (Func<VRCUiManager>)Delegate.CreateDelegate(typeof(Func<VRCUiManager>), typeof(VRCUiManager)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(VRCUiManager)).GetMethod);
+            ourGetQuickMenu = (Func<QuickMenu>)Delegate.CreateDelegate(typeof(Func<QuickMenu>), typeof(QuickMenu)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(QuickMenu)).GetMethod);
+
+        }
+
+        internal static VRCUiManager GetUiManager() => ourGetUiManager();
+        internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
+
+
+
         public override void OnApplicationStart()
         {
             ExpansionKitApi.RegisterWaitConditionBeforeDecorating(WaitAndRegisterEmojiButtons());
@@ -21,10 +47,10 @@ namespace EmojiPageButtons
 
         private IEnumerator WaitAndRegisterEmojiButtons()
         {
-            while (QuickMenu.prop_QuickMenu_0 == null)
+            while (GetQuickMenu() == null)
                 yield return null;
 
-            var emojiMenuRoot = QuickMenu.prop_QuickMenu_0.transform.Find("EmojiMenu");
+            var emojiMenuRoot = GetQuickMenu().transform.Find("EmojiMenu");
             if (emojiMenuRoot == null)
             {
                 MelonLogger.Error("Emoji menu root not found");

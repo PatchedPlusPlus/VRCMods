@@ -7,13 +7,15 @@ using MelonLoader;
 using UnhollowerBaseLib;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using System.Linq;
+
 
 [assembly:MelonInfo(typeof(FinitizerMod), "Finitizer", "1.3.1", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace Finitizer
 {
-    internal partial class FinitizerMod : MelonMod
+    internal class FinitizerMod : MelonMod
     {
         private const string SettingsCategory = "Finitizer";
         private const string EnabledSetting = "Enabled";
@@ -24,6 +26,28 @@ namespace Finitizer
 
         private bool myArePatchesApplied;
         private bool myWasEnabled;
+
+
+
+        private static Func<VRCUiManager> ourGetUiManager;
+        private static Func<QuickMenu> ourGetQuickMenu;
+
+        static FinitizerMod()
+        {
+
+            ourGetUiManager = (Func<VRCUiManager>)Delegate.CreateDelegate(typeof(Func<VRCUiManager>), typeof(VRCUiManager)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(VRCUiManager)).GetMethod);
+            ourGetQuickMenu = (Func<QuickMenu>)Delegate.CreateDelegate(typeof(Func<QuickMenu>), typeof(QuickMenu)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(QuickMenu)).GetMethod);
+
+        }
+
+        internal static VRCUiManager GetUiManager() => ourGetUiManager();
+        internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
+
+
 
         public override void OnApplicationStart()
         {
