@@ -15,8 +15,12 @@ using UnhollowerRuntimeLib.XrefScans;
 using UnityEngine;
 using UnityEngine.UI;
 using Valve.VR;
-using Delegate = Il2CppSystem.Delegate;
 using Object = UnityEngine.Object;
+using Delegate = Il2CppSystem.Delegate;
+using System.Collections;
+
+
+
 
 [assembly:MelonInfo(typeof(IKTweaksMod), "IKTweaks", "1.0.15", "knah", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
@@ -24,18 +28,49 @@ using Object = UnityEngine.Object;
 
 namespace IKTweaks
 {
-    internal partial class IKTweaksMod : MelonMod
+    internal class IKTweaksMod : MelonMod
     {
         private static readonly Queue<Action> ourToMainThreadQueue = new Queue<Action>();
         private static readonly Queue<Action> ourToIKLateUpdateQueue = new Queue<Action>();
         private static Func<VRCAvatarManager, float> ourGetEyeHeightDelegate;
-        
+
         internal static GameObject ourRandomPuck;
+
+        private static Func<VRCUiManager> ourGetUiManager;
+        private static Func<QuickMenu> ourGetQuickMenu;
+
+        static IKTweaksMod()
+        {
+
+            ourGetUiManager = (Func<VRCUiManager>)System.Delegate.CreateDelegate(typeof(Func<VRCUiManager>), typeof(VRCUiManager)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(VRCUiManager)).GetMethod);
+            ourGetQuickMenu = (Func<QuickMenu>)System.Delegate.CreateDelegate(typeof(Func<QuickMenu>), typeof(QuickMenu)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .First(it => it.PropertyType == typeof(QuickMenu)).GetMethod);
+
+        }
+
+
+        internal static VRCUiManager GetUiManager() => ourGetUiManager();
+        internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
+
+        private static void DoAfterUiManagerInit(Action code)
+        {
+            MelonCoroutines.Start(OnUiManagerInitCoro(code));
+        }
+
+        private static IEnumerator OnUiManagerInitCoro(Action code)
+        {
+            while (VRCUiManager.prop_VRCUiManager_0 == null)
+                yield return null;
+            code();
+        }
 
         public override void OnApplicationStart()
         {
-            if (!CheckWasSuccessful || !MustStayTrue || MustStayFalse) return;
-            
+            //if (!CheckWasSuccessful || !MustStayTrue || MustStayFalse) return;
+
             IkTweaksSettings.RegisterSettings();
 
             BundleHolder.Init();
@@ -45,9 +80,9 @@ namespace IKTweaks
 
             VrIkHandling.HookVrIkInit(HarmonyInstance);
             FullBodyHandling.HookFullBodyController(HarmonyInstance);
-            
+
             Camera.onPreRender = Delegate.Combine(Camera.onPreRender, (Camera.CameraCallback) OnVeryLateUpdate).Cast<Camera.CameraCallback>();
-            
+
             DoAfterUiManagerInit(OnUiManagerInit);
 
             ourGetEyeHeightDelegate = (Func<VRCAvatarManager, float>) System.Delegate.CreateDelegate(typeof(Func<VRCAvatarManager, float>), typeof(VRCAvatarManager)
@@ -64,8 +99,8 @@ namespace IKTweaks
                         jt.Type == XrefType.Global &&
                         jt.ReadAsObject()?.ToString() == "Asked for arm length before measured.")),
                 new HarmonyMethod(typeof(IKTweaksMod), nameof(WingspanPatch)));
-            
-            if (MelonHandler.Mods.Any(it => it.Info.Name == "UI Expansion Kit" && !it.Info.Version.StartsWith("0.1."))) 
+
+            if (MelonHandler.Mods.Any(it => it.Info.Name == "UI Expansion Kit" && !it.Info.Version.StartsWith("0.1.")))
                 AddUixActions();
         }
 
@@ -146,12 +181,12 @@ namespace IKTweaks
             menu.AddSpacer();
             menu.AddSpacer();
             menu.AddSimpleButton("Open documentation in browser", () => Process.Start("https://github.com/knah/VRCMods#iktweaks"));
-            
+
             menu.AddSpacer();
             menu.AddSpacer();
             menu.AddSpacer();
             menu.AddSimpleButton("Close", menu.Hide);
-            
+
             menu.Show();
         }
 
@@ -201,7 +236,7 @@ namespace IKTweaks
             steamVrControllerManager.field_Public_ArrayOf_GameObject_0 = newPucks;
             steamVrControllerManager.field_Private_ArrayOf_UInt32_0 = newUints;
 
-            // only one of them is the correct type, so just try all of them 
+            // only one of them is the correct type, so just try all of them
             steamVrControllerManager.field_Private_Action_0.TryCast<SteamVR_Events.Action<VREvent_t>>()?.action?.Invoke(new VREvent_t());
             steamVrControllerManager.field_Private_Action_1.TryCast<SteamVR_Events.Action<VREvent_t>>()?.action?.Invoke(new VREvent_t());
             steamVrControllerManager.field_Private_Action_2.TryCast<SteamVR_Events.Action<VREvent_t>>()?.action?.Invoke(new VREvent_t());
@@ -217,7 +252,7 @@ namespace IKTweaks
         public void OnVeryLateUpdate(Camera _)
         {
             if (ourHadUpdateThisFrame) return;
-            
+
             ourHadUpdateThisFrame = true;
 
             ProcessQueue(ourToMainThreadQueue);

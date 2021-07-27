@@ -199,7 +199,7 @@ namespace RootMotionNew.FinalIK
 					bendNormal = PlanarBendNormal(bones[0].solverPosition, position, bendGoal.position);
 			}
 			
-			public override void ApplyOffsets()
+			public override void ApplyOffsets(float scale)
 			{
 				var oldWeight = bendGoalWeight;
 				bendGoalWeight = 0f;
