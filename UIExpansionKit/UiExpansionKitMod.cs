@@ -18,7 +18,7 @@ using HarmonyLib;
 using System.Runtime.InteropServices;
 
 
-[assembly:MelonInfo(typeof(UiExpansionKitMod), "UI Expansion Kit", "0.3.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(UiExpansionKitMod), "UI Expansion Kit", "0.3.4", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace UIExpansionKit
@@ -203,10 +203,10 @@ namespace UIExpansionKit
 
             var quickMenuExpandoPrefab = myStuffBundle.QuickMenuExpando;
             var quickMenuRoot = GetQuickMenu().gameObject;
-            
+
             var fullMenuExpandoPrefab = myStuffBundle.BigMenuExpando;
             var fullMenuRoot = GetUiManager().field_Public_GameObject_0;
-            
+
             foreach (var valueTuple in GameObjectToCategoryList)
             {
                 var categoryEnum = valueTuple.Item1;
