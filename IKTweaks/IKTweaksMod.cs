@@ -19,7 +19,7 @@ using Object = UnityEngine.Object;
 using Delegate = Il2CppSystem.Delegate;
 using System.Collections;
 
-[assembly:MelonInfo(typeof(IKTweaksMod), "IKTweaks", "1.0.16", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(IKTweaksMod), "IKTweaks", "1.0.17", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 [assembly:MelonOptionalDependencies("UIExpansionKit")]
 
