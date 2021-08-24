@@ -42,6 +42,11 @@ namespace IKTweaks
         
         internal static VRCFbbIkController LastInitializedController;
         internal static VRIK_New LastInitializedVRIK;
+        internal static float LastAvatarScale;
+
+        internal static Transform LeftEffector;
+        internal static Transform RightEffector;
+        internal static Transform HeadEffector;
 
         internal static float LeftElbowWeight = 0f;
         internal static float RightElbowWeight = 0f;
@@ -53,21 +58,32 @@ namespace IKTweaks
         private static Func<bool> ourIsFbtSupported;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static float GetHandWeight(float inWeight)
+        private static float GetHandWeight(float inWeight, bool firstPuckDisabled)
         {
-            if ((IkTweaksSettings.IgnoreAnimationsModeParsed & IgnoreAnimationsMode.Hands) != 0)
+            if ((IkTweaksSettings.IgnoreAnimationsModeParsed & IgnoreAnimationsMode.Hands) != 0 && !firstPuckDisabled)
                 return 1;
             
             return inWeight;
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static float GetOtherWeight(float inWeight)
+        private static float GetOtherWeight(float inWeight, bool firstPuckDisabled)
         {
-            if ((IkTweaksSettings.IgnoreAnimationsModeParsed & IgnoreAnimationsMode.Others) != 0)
+            if ((IkTweaksSettings.IgnoreAnimationsModeParsed & IgnoreAnimationsMode.Others) != 0 && !firstPuckDisabled)
                 return 1;
             
             return inWeight;
+        }
+
+        private static void MoveHeadAndHandTargets()
+        {
+            var headTracker = VRCTrackingManager.Method_Public_Static_Transform_EnumNPublicSealedva19Unique_0(VRCTracking.EnumNPublicSealedva19Unique.EnumValue0);
+            var leftTracker = VRCTrackingManager.Method_Public_Static_Transform_EnumNPublicSealedva19Unique_0(VRCTracking.EnumNPublicSealedva19Unique.EnumValue1);
+            var rightTracker = VRCTrackingManager.Method_Public_Static_Transform_EnumNPublicSealedva19Unique_0(VRCTracking.EnumNPublicSealedva19Unique.EnumValue2);
+            
+            LeftEffector.SetPositionAndRotation(leftTracker.position, leftTracker.rotation);
+            RightEffector.SetPositionAndRotation(rightTracker.position, rightTracker.rotation);
+            HeadEffector.SetPositionAndRotation(headTracker.position, headTracker.rotation);
         }
         
         public static void Update()
@@ -112,23 +128,23 @@ namespace IKTweaks
             if (IkTweaksSettings.IgnoreAnimationsModeParsed != IgnoreAnimationsMode.All || firstPuckDisabled)
             {
                 var leftLegMappingWeight = fbbik.solver.leftLegMapping.weight;
-                vrik.solver.leftLeg.positionWeight = GetOtherWeight(fbbik.solver.leftFootEffector.positionWeight * leftLegMappingWeight);
-                vrik.solver.leftLeg.rotationWeight = GetOtherWeight(fbbik.solver.leftFootEffector.rotationWeight * leftLegMappingWeight);
+                vrik.solver.leftLeg.positionWeight = GetOtherWeight(fbbik.solver.leftFootEffector.positionWeight * leftLegMappingWeight, firstPuckDisabled);
+                vrik.solver.leftLeg.rotationWeight = GetOtherWeight(fbbik.solver.leftFootEffector.rotationWeight * leftLegMappingWeight, firstPuckDisabled);
 
                 var rightLegMappingWeight = fbbik.solver.rightLegMapping.weight;
-                vrik.solver.rightLeg.positionWeight = GetOtherWeight(fbbik.solver.rightFootEffector.positionWeight * rightLegMappingWeight);
-                vrik.solver.rightLeg.rotationWeight = GetOtherWeight(fbbik.solver.rightFootEffector.rotationWeight * rightLegMappingWeight);
+                vrik.solver.rightLeg.positionWeight = GetOtherWeight(fbbik.solver.rightFootEffector.positionWeight * rightLegMappingWeight, firstPuckDisabled);
+                vrik.solver.rightLeg.rotationWeight = GetOtherWeight(fbbik.solver.rightFootEffector.rotationWeight * rightLegMappingWeight, firstPuckDisabled);
                 
-                vrik.solver.spine.pelvisPositionWeight = GetOtherWeight(fbbik.solver.bodyEffector.positionWeight);
-                vrik.solver.spine.pelvisRotationWeight = GetOtherWeight(fbbik.solver.bodyEffector.rotationWeight);
+                vrik.solver.spine.pelvisPositionWeight = GetOtherWeight(fbbik.solver.bodyEffector.positionWeight, firstPuckDisabled);
+                vrik.solver.spine.pelvisRotationWeight = GetOtherWeight(fbbik.solver.bodyEffector.rotationWeight, firstPuckDisabled);
 
                 var leftArmMappingWeight = fbbik.solver.leftArmMapping.weight;
-                vrik.solver.leftArm.positionWeight = GetHandWeight(fbbik.solver.leftHandEffector.positionWeight * leftArmMappingWeight);
-                vrik.solver.leftArm.rotationWeight = GetHandWeight(fbbik.solver.leftHandEffector.rotationWeight * leftArmMappingWeight);
+                vrik.solver.leftArm.positionWeight = GetHandWeight(fbbik.solver.leftHandEffector.positionWeight * leftArmMappingWeight, firstPuckDisabled);
+                vrik.solver.leftArm.rotationWeight = GetHandWeight(fbbik.solver.leftHandEffector.rotationWeight * leftArmMappingWeight, firstPuckDisabled);
 
                 var rightArmMappingWeight = fbbik.solver.rightArmMapping.weight;
-                vrik.solver.rightArm.positionWeight = GetHandWeight(fbbik.solver.rightHandEffector.positionWeight * rightArmMappingWeight);
-                vrik.solver.rightArm.rotationWeight = GetHandWeight(fbbik.solver.rightHandEffector.rotationWeight * rightArmMappingWeight);
+                vrik.solver.rightArm.positionWeight = GetHandWeight(fbbik.solver.rightHandEffector.positionWeight * rightArmMappingWeight, firstPuckDisabled);
+                vrik.solver.rightArm.rotationWeight = GetHandWeight(fbbik.solver.rightHandEffector.rotationWeight * rightArmMappingWeight, firstPuckDisabled);
             }
             else
             {
@@ -388,7 +404,7 @@ namespace IKTweaks
             var __2 = playerPtr == IntPtr.Zero ? null : new VRCPlayer(playerPtr);
             FbbIkInitPrefix(__instance, __2, isLocalPlayer != 0);
             var result = ourOriginalFbbIkInit(thisPtr, vrcAnimController, animatorPtr, playerPtr, isLocalPlayer, nativeMethod);
-            FbbIkInitPostfix(animator, isLocalPlayer != 0);
+            FbbIkInitPostfix(__instance, animator, isLocalPlayer != 0);
             return result;
         }
 
@@ -404,11 +420,17 @@ namespace IKTweaks
             LastInitializedController = __instance;
         }
 
-        private static void FbbIkInitPostfix(Animator __1, bool __3)
+        private static void FbbIkInitPostfix(VRCFbbIkController __instance, Animator __1, bool __3)
         {
             if (!__3 || !IkTweaksSettings.FullBodyVrIk.Value || !ourIsFbtSupported()) return;
             
             LastCalibrationWasInCustomIk = true;
+            LeftEffector = LastInitializedController.field_Private_IkController_0.transform.Find("LeftEffector");
+            RightEffector = LastInitializedController.field_Private_IkController_0.transform.Find("RightEffector");
+            HeadEffector = LastInitializedController.field_Private_IkController_0.transform.Find("HeadEffector");
+            
+            LastAvatarScale = IKTweaksMod.GetEyeHeight(__instance.field_Private_VRCAvatarManager_0);
+            
             CalibrationManager.Calibrate(__1.gameObject);
         }
 
@@ -430,9 +452,13 @@ namespace IKTweaks
             if (IkTweaksSettings.FullBodyVrIk.Value && LastCalibrationWasInCustomIk &&
                 LastInitializedController.field_Private_FullBodyBipedIK_0 == __instance)
             {
+                if (IkTweaksSettings.NoWallFreeze.Value)
+                    MoveHeadAndHandTargets();
+                
                 Update();
-                if(LastInitializedVRIK != null)
+                if (LastInitializedVRIK != null) 
                     LastInitializedVRIK.LateUpdate_ManualDrive();
+
                 return false;
             }
 

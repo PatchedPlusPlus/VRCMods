@@ -28,7 +28,7 @@ using System.Globalization;
 
 // using CameraUtil = ObjectPublicCaSiVeUnique;
 
-[assembly:MelonInfo(typeof(LagFreeScreenshotsMod), "Lag Free Screenshots", "1.2.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(LagFreeScreenshotsMod), "Lag Free Screenshots", "1.2.4", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace LagFreeScreenshots
@@ -205,7 +205,10 @@ namespace LagFreeScreenshots
             else maxMsaa = 1;
 
             if (maxMsaa != ourLastUsedMsaaLevel)
+            {
                 MelonLogger.Msg($"Using MSAA x{maxMsaa} for screenshots (FB size {(colorSizePerLevel * maxMsaa + colorSizePerLevel / 2) / 1024 / 1024}MB)");
+                ourLastUsedMsaaLevel = (int) maxMsaa;
+            }
 
             return (int) maxMsaa;
         }
