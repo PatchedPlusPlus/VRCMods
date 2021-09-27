@@ -4,12 +4,12 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <VrcReferences>true</VrcReferences>
     <UseAltLibs>true</UseAltLibs>
-    <AssemblyVersion>1.0.5</AssemblyVersion>
     <AssemblyName>JoinNotifier</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
+    <AssemblyVersion>1.0.6</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="joinnotifier.assetbundle" />

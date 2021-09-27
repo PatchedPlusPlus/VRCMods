@@ -5,13 +5,13 @@
         <VrcReferences>true</VrcReferences>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>8</LangVersion>
-        <Version>1.2.4.0</Version>
         <AssemblyName>LagFreeScreenshots</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
       <DebugType>none</DebugType>
       <DebugSymbols>false</DebugSymbols>
+        <Version>1.2.5.0</Version>
     </PropertyGroup>
 
     <ItemGroup>

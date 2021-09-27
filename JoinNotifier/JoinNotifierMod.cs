@@ -16,7 +16,7 @@ using VRC.Core;
 using VRC.Management;
 using Object = UnityEngine.Object;
 
-[assembly:MelonInfo(typeof(JoinNotifierMod), "JoinNotifier", "1.0.5", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(JoinNotifierMod), "JoinNotifier", "1.0.6", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace JoinNotifier
@@ -288,6 +288,10 @@ namespace JoinNotifier
                myJoinSource.Play();
             if (JoinNotifierSettings.ShouldShowNames(true))
                 MelonCoroutines.Start(ShowName(myJoinText, myJoinNames, playerName, true, isFriendsWith));
+            if (JoinNotifierSettings.LogToConsole.Value)
+                MelonLogger.Msg(isFriendsWith && JoinNotifierSettings.ShowFriendsInDifferentColor.Value
+                        ? ConsoleColor.DarkYellow : ConsoleColor.DarkCyan, 
+                    $"{(isFriendsWith ? "Friend " : "")}{playerName} joined");
         }
 
         public void OnPlayerLeft(Player player)
@@ -312,6 +316,10 @@ namespace JoinNotifier
                 myLeaveSource.Play();
             if (JoinNotifierSettings.ShouldShowNames(false))
                 MelonCoroutines.Start(ShowName(myLeaveText, myLeaveNames, playerName, false, isFriendsWith));
+            if (JoinNotifierSettings.LogToConsole.Value)
+                MelonLogger.Msg(isFriendsWith && JoinNotifierSettings.ShowFriendsInDifferentColor.Value
+                        ? ConsoleColor.DarkYellow : ConsoleColor.DarkMagenta, 
+                    $"{(isFriendsWith ? "Friend " : "")}{playerName} left");
         }
 
         public IEnumerator ShowName(Text text, List<string> namesList, string name, bool isJoin, bool isFriend)

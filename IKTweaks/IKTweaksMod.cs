@@ -20,7 +20,7 @@ using Object = UnityEngine.Object;
 using Delegate = Il2CppSystem.Delegate;
 using System.Collections;
 
-[assembly:MelonInfo(typeof(IKTweaksMod), "IKTweaks", "1.0.18", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(IKTweaksMod), "IKTweaks", "1.0.19", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 [assembly:MelonOptionalDependencies("UIExpansionKit")]
 
@@ -276,7 +276,7 @@ namespace IKTweaks
                     if (IkTweaksSettings.CalibrateUseUniversal.Value)
                         CalibrationManager.Clear();
                     else
-                        CalibrationManager.Clear(VRCPlayer.field_Internal_Static_VRCPlayer_0.prop_VRCAvatarManager_0.field_Private_ApiAvatar_1.id);
+                        CalibrationManager.Clear(VRCPlayer.field_Internal_Static_VRCPlayer_0.prop_VRCAvatarManager_0.field_Private_ApiAvatar_0.id);
                 }
 
                 oldCalibrate.Invoke();
