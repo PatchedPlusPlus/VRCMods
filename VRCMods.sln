@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31321.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JoinNotifier", "JoinNotifier\JoinNotifier.csproj", "{C874139C-FABC-4D70-9EEA-49DCBEE699DF}"
 EndProject
@@ -40,7 +40,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewPointTweaker", "ViewPoi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagFreeScreenshots", "LagFreeScreenshots\LagFreeScreenshots.csproj", "{A86F2C6D-80D3-47FA-B784-59FF333E6FE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKTweaks", "IKTweaks\IKTweaks.csproj", "{3F5F4515-EB54-4156-8E53-BB9862DADB2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IKTweaks", "IKTweaks\IKTweaks.csproj", "{3F5F4515-EB54-4156-8E53-BB9862DADB2C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrueShaderAntiCrash", "TrueShaderAntiCrash\TrueShaderAntiCrash.csproj", "{A9086D1D-AC75-4E98-89ED-8FB25D16DACA}"
 EndProject
@@ -49,6 +49,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrityCheckWeaver", "IntegrityCheckWeaver\IntegrityCheckWeaver.csproj", "{5D5E4629-D3E4-472A-9FD5-02328BF765C6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrityCheckGenerator", "IntegrityCheckGenerator\IntegrityCheckGenerator.csproj", "{A53EABDB-3023-4D3E-8E30-71FFAAD6D8D3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Styletor", "Styletor\Styletor.csproj", "{27F7A678-72DD-4BEA-B5FA-4589299FE595}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -128,6 +130,10 @@ Global
 		{A53EABDB-3023-4D3E-8E30-71FFAAD6D8D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A53EABDB-3023-4D3E-8E30-71FFAAD6D8D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A53EABDB-3023-4D3E-8E30-71FFAAD6D8D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27F7A678-72DD-4BEA-B5FA-4589299FE595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27F7A678-72DD-4BEA-B5FA-4589299FE595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27F7A678-72DD-4BEA-B5FA-4589299FE595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27F7A678-72DD-4BEA-B5FA-4589299FE595}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
