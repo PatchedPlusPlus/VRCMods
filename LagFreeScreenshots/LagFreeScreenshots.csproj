@@ -4,14 +4,14 @@
         <TargetFramework>net48</TargetFramework>
         <VrcReferences>true</VrcReferences>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <LangVersion>8</LangVersion>
+        <LangVersion>latest</LangVersion>
         <AssemblyName>LagFreeScreenshots</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
       <DebugType>none</DebugType>
       <DebugSymbols>false</DebugSymbols>
-        <Version>1.2.7.0</Version>
+        <Version>1.3.1.0</Version>
     </PropertyGroup>
 
     <ItemGroup>

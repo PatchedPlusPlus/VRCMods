@@ -80,6 +80,11 @@
             <Private>false</Private>
             <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\UnityEngine.VRModule.dll</HintPath>
         </Reference>
+        <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <SpecificVersion>false</SpecificVersion>
+            <Private>false</Private>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
         <Reference Include="MelonLoader, Version=0.3.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
@@ -155,17 +160,17 @@
         <Reference Include="DataModel, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)Libs\DataModel.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\DataModel.dll</HintPath>
         </Reference>
         <Reference Include="VRC.UI.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)Libs\VRC.UI.Core.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\VRC.UI.Core.dll</HintPath>
         </Reference>
         <Reference Include="VRC.UI.Elements, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)Libs\VRC.UI.Elements.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\VRC.UI.Elements.dll</HintPath>
         </Reference>
         <Reference Include="VRC.Udon, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
@@ -196,21 +201,6 @@
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
             <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\Il2CppSystem.Collections.Immutable.dll</HintPath>
-        </Reference>
-        <Reference Include="DataModel, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <SpecificVersion>false</SpecificVersion>
-            <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\DataModel.dll</HintPath>
-        </Reference>
-        <Reference Include="VRC.UI.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <SpecificVersion>false</SpecificVersion>
-            <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\VRC.UI.Core.dll</HintPath>
-        </Reference>
-        <Reference Include="VRC.UI.Elements, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <SpecificVersion>false</SpecificVersion>
-            <Private>false</Private>
-            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\VRC.UI.Elements.dll</HintPath>
         </Reference>
     </ItemGroup>
 

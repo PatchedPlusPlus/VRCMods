@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using Il2CppSystem.Collections.Generic;
 using MelonLoader;
@@ -7,12 +8,10 @@ using MirrorResolutionUnlimiter;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using VRC.SDKBase;
-using System.Reflection;
 
-
-[assembly:MelonInfo(typeof(MirrorResolutionUnlimiterMod), "MirrorResolutionUnlimiter", "1.1.3", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
-[assembly:MelonGame("VRChat", "VRChat")]
-[assembly:MelonOptionalDependencies("UIExpansionKit")]
+[assembly: MelonInfo(typeof(MirrorResolutionUnlimiterMod), "MirrorResolutionUnlimiter", "1.1.4", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly: MelonGame("VRChat", "VRChat")]
+[assembly: MelonOptionalDependencies("UIExpansionKit")]
 
 namespace MirrorResolutionUnlimiter
 {
@@ -29,9 +28,9 @@ namespace MirrorResolutionUnlimiter
         private static bool ourAllMirrorsAuto = false;
         private static int ourMirrorMsaa = 0;
         private static MelonPreferences_Entry<bool> ourMsaaIsUpperLimit;
+        internal static MelonPreferences_Entry<bool> UiInMirrors;
 
         private MelonPreferences_Entry<string> myPixelLightsSetting;
-
 
         private static Func<VRCUiManager> ourGetUiManager;
         private static Func<QuickMenu> ourGetQuickMenu;
@@ -50,7 +49,6 @@ namespace MirrorResolutionUnlimiter
 
         internal static VRCUiManager GetUiManager() => ourGetUiManager();
         internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
-
 
         public override void OnApplicationStart()
         {
@@ -80,6 +78,8 @@ namespace MirrorResolutionUnlimiter
             myPixelLightsSetting.OnValueChangedUntyped += UpdateMirrorPixelLights;
 
             ourMsaaIsUpperLimit = category.CreateEntry("MsaaIsUpperLimit", true, "Mirror MSAA setting is upper limit (otherwise static)");
+
+            UiInMirrors = category.CreateEntry("UiInMirrors", false, "Include UI in mirrors when using Optimize/Beautify buttons");
 
             HarmonyInstance.Patch(
                 AccessTools.Method(typeof(VRC_MirrorReflection), nameof(VRC_MirrorReflection.GetReflectionData)),
@@ -143,7 +143,7 @@ namespace MirrorResolutionUnlimiter
                 var reflectionData = reflections.ContainsKey(currentCamera)
                     ? reflections[currentCamera]
                     : reflections[currentCamera] = new VRC_MirrorReflection.ReflectionData
-                        {propertyBlock = new MaterialPropertyBlock()};
+                    { propertyBlock = new MaterialPropertyBlock() };
 
                 if (@this._temporaryRenderTexture)
                     RenderTexture.ReleaseTemporary(@this._temporaryRenderTexture);
@@ -161,7 +161,7 @@ namespace MirrorResolutionUnlimiter
                     height = Mathf.Min(currentCamera.pixelHeight, ourMaxEyeResolution);
                 }
                 else
-                    width = height = (int) @this.mirrorResolution;
+                    width = height = (int)@this.mirrorResolution;
 
                 var requestedMsaa = currentCamera.targetTexture?.antiAliasing ?? QualitySettings.antiAliasing;
                 if (ourMirrorMsaa != 0)

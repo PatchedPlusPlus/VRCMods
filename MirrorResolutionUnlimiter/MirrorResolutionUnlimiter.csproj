@@ -5,12 +5,8 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
         <UseAltLibs>true</UseAltLibs>
-        <AssemblyVersion>1.1.3.0</AssemblyVersion>
-        <AssemblyName>MirrorResolutionUnlimiter</AssemblyName>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-      <DebugType>none</DebugType>
-      <DebugSymbols>false</DebugSymbols>
+        <AssemblyVersion>1.1.4.0</AssemblyVersion>
+        <DebugType>none</DebugType>
     </PropertyGroup>
     <ItemGroup>
       <ProjectReference Include="..\UIExpansionKit\UIExpansionKit.csproj">
