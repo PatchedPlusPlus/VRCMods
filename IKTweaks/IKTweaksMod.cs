@@ -20,7 +20,7 @@ using Object = UnityEngine.Object;
 using Delegate = Il2CppSystem.Delegate;
 using System.Collections;
 
-[assembly:MelonInfo(typeof(IKTweaksMod), "IKTweaks", "1.0.21", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(IKTweaksMod), "IKTweaks", "1.0.23", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 [assembly:MelonOptionalDependencies("UIExpansionKit")]
 
@@ -33,6 +33,7 @@ namespace IKTweaks
         private static Func<VRCAvatarManager, float> ourGetEyeHeightDelegate;
 
         internal static GameObject ourRandomPuck;
+        private GameObject myAfkIcon;
 
         private static Func<VRCUiManager> ourGetUiManager;
         private static Func<QuickMenu> ourGetQuickMenu;
@@ -260,8 +261,10 @@ namespace IKTweaks
             DoMove(Vector3.zero);
         }
 
-        private static void CalibratePrefix()
+        private static void CalibratePrefix(MethodBase __originalMethod)
         {
+            MelonDebug.Msg("Called calibrate from " + __originalMethod);
+            
             if (!IkTweaksSettings.FullBodyVrIk.Value) return;
             
             MelonLogger.Msg("Clearing stored calibrations due to calibrate button press");
@@ -277,6 +280,13 @@ namespace IKTweaks
             foreach (var methodInfo in typeof(VRCTrackingManager).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly))
             {
                 if (!methodInfo.Name.StartsWith("Method_Public_Virtual_Final_New_Void_") || methodInfo.GetParameters().Length != 0) continue;
+
+                var callees = XrefScanner.XrefScan(methodInfo).Where(it => it.Type == XrefType.Method)
+                    .Select(it => it.TryResolve()).Where(it => it != null).ToList();
+
+                if (callees.Count != 1) continue;
+                if (callees[0].DeclaringType != typeof(VRCTrackingManager) || callees[0] is not MethodInfo mi || mi.ReturnType != typeof(bool))
+                    continue;
                 
                 HarmonyInstance.Patch(methodInfo, new HarmonyMethod(typeof(IKTweaksMod), nameof(CalibratePrefix)));
             }
@@ -312,13 +322,25 @@ namespace IKTweaks
             steamVrControllerManager.field_Private_Action_0.TryCast<SteamVR_Events.Action<VREvent_t>>()?.action?.Invoke(new VREvent_t());
             steamVrControllerManager.field_Private_Action_1.TryCast<SteamVR_Events.Action<VREvent_t>>()?.action?.Invoke(new VREvent_t());
             steamVrControllerManager.field_Private_Action_2.TryCast<SteamVR_Events.Action<VREvent_t>>()?.action?.Invoke(new VREvent_t());
+
+            myAfkIcon = GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud/AFK").transform.Find("Icon").gameObject;
         }
 
+        public static bool IsAfk { get; private set; }
+
+        private int myAfkUpdateCounter = 45;
         private static bool ourHadUpdateThisFrame = false;
         public override void OnUpdate()
         {
             VrIkHandling.Update();
             ourHadUpdateThisFrame = false;
+            // Only check AFK icon once per 45 frames - integer math is fast, touching il2cpp is slow
+            if (myAfkUpdateCounter-- > 0) return;
+            
+            myAfkUpdateCounter = 45;
+            if (!ReferenceEquals(myAfkIcon, null)) 
+                IsAfk = myAfkIcon.activeSelf;
+
         }
 
         public void OnVeryLateUpdate(Camera _)

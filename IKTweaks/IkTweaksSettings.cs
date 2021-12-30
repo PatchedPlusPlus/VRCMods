@@ -34,7 +34,7 @@ namespace IKTweaks
             CalibrateUseUniversal = category.CreateEntry(nameof(CalibrateUseUniversal), true, "Use universal calibration (requires follow head mode)");
 
             CalibrateStorePerAvatar = category.CreateEntry(nameof(CalibrateStorePerAvatar), true, "Store calibration per avatar (when not using universal calibration)");
-            DisableFbt = category.CreateEntry(nameof(DisableFbt), false, "Disable FBT even if trackers are present");
+            APoseCalibration = category.CreateEntry(nameof(APoseCalibration), false, "A-pose calibration");
             PinHipRotation = category.CreateEntry(nameof(PinHipRotation), true, "Enforce hip rotation match");
             
             DoHipShifting = category.CreateEntry(nameof(DoHipShifting), true, "Shift hip pivot (support inverted hip)");
@@ -53,12 +53,13 @@ namespace IKTweaks
             StraightSpinePower = category.CreateEntry(nameof(StraightSpinePower), 2f, "Straight spine power");
             MeasureMode = category.CreateEntry(nameof(MeasureMode), nameof(MeasureAvatarMode.ImprovedWingspan), "Avatar scaling mode");
             
-            APoseCalibration = category.CreateEntry(nameof(APoseCalibration), false, "A-pose calibration");
             Unrestrict3PointHeadRotation = category.CreateEntry(nameof(Unrestrict3PointHeadRotation), true, "Allow more head rotation in 3/4-point tracking");
             WingspanMeasurementAdjustFactor = category.CreateEntry(nameof(WingspanMeasurementAdjustFactor), 1.1f, "Improved wingspan adjustment factor");
-            
             OneHandedCalibration = category.CreateEntry(nameof(OneHandedCalibration), false, "One-handed calibration");
+            
             NoWallFreeze = category.CreateEntry(nameof(NoWallFreeze), true, "Don't freeze head/hands inside walls");
+
+            ExperimentalSettingOne = category.CreateEntry(nameof(ExperimentalSettingOne), false, "Experimental setting", dont_save_default: true, is_hidden: true);
             
             HandAngleOffset = category.CreateEntry(nameof(HandAngleOffset), DefaultHandAngle, "Hand angle offset", null, true);
             HandPositionOffset = category.CreateEntry(nameof(HandPositionOffset), DefaultHandOffset, "Hand position offset", null, true);
@@ -97,7 +98,6 @@ namespace IKTweaks
         public static MelonPreferences_Entry<string> IgnoreAnimationsMode;
         public static MelonPreferences_Entry<bool> PlantFeet;
         public static MelonPreferences_Entry<bool> FullBodyVrIk;
-        public static MelonPreferences_Entry<bool> DisableFbt;
         public static MelonPreferences_Entry<float> MaxSpineAngleFwd;
         public static MelonPreferences_Entry<float> MaxSpineAngleBack;
         public static MelonPreferences_Entry<int> SpineRelaxIterations;
@@ -118,6 +118,7 @@ namespace IKTweaks
         public static MelonPreferences_Entry<float> WingspanMeasurementAdjustFactor;
         public static MelonPreferences_Entry<bool> OneHandedCalibration;
         public static MelonPreferences_Entry<bool> NoWallFreeze;
+        public static MelonPreferences_Entry<bool> ExperimentalSettingOne;
         
         public static MelonPreferences_Entry<Vector3> HandAngleOffset;
         public static MelonPreferences_Entry<Vector3> HandPositionOffset;
@@ -142,5 +143,12 @@ namespace IKTweaks
         Default,
         Height,
         ImprovedWingspan
+    }
+
+    public enum DriftPreference
+    {
+        Hips,
+        Viewpoint,
+        Custom
     }
 }

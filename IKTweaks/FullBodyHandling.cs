@@ -114,7 +114,8 @@ namespace IKTweaks
             
             var vrik = fbbik.GetComponent<VRIK_New>();
 
-            var firstPuckDisabled = !IKTweaksMod.ourRandomPuck.activeInHierarchy;
+            // AFK is similar to not having trackers, i.e. overlay
+            var firstPuckDisabled = !IKTweaksMod.ourRandomPuck.activeInHierarchy || IKTweaksMod.IsAfk;
             
             fbbik.skipSolverUpdate = true;
             if (LastInitializedController.field_Private_FBBIKHeadEffector_0 != null)
@@ -452,17 +453,6 @@ namespace IKTweaks
             CalibrationManager.Calibrate(__1.gameObject);
         }
 
-        private static bool PatchHipAndFeetTracking(ref bool __result)
-        {
-            if (IkTweaksSettings.DisableFbt.Value)
-            {
-                __result = false;
-                return false;
-            }
-
-            return true;
-        }
-
         private static bool LateUpdatePrefix(FullBodyBipedIK __instance)
         {
             IKTweaksMod.ProcessIKLateUpdateQueue();
@@ -570,7 +560,6 @@ namespace IKTweaks
                 MelonDebug.Msg("hafts candidate: " + hipAndFeetTrackingSupportedCandidate.TryResolve()?.FullDescription());
 
             var hipAndFeetTrackingSupported = (MethodInfo) hipAndFeetTrackingSupportedCandidates.First().TryResolve();
-            harmony.Patch(hipAndFeetTrackingSupported, new HarmonyMethod(typeof(FullBodyHandling), nameof(PatchHipAndFeetTracking)));
             ourIsFbtSupported = (Func<bool>) Delegate.CreateDelegate(typeof(Func<bool>), hipAndFeetTrackingSupported);
         }
     }
