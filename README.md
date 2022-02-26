@@ -1,8 +1,7 @@
 This repository contains a modified version of [knah](https://github.com/knah/VRCMods) for VRChat. 
 
 + Join the [VRChat Modding Group discord](https://discord.gg/rCqKSvR) for more mods!
-+ Join the [VRCMG Unchained discord](https://discord.gg/boycottknah) for support and more mods!
-+ Join the [VRC Modding Group Plus+](https://discord.gg/2k6pXM4uYw) for support
++ Join the [VRC Modding Group Plus+](https://discord.gg/gPWJMFVreS) for support
 
 Using a modified MelonLoader without some security features brings a risk with it, you should read Knah's blogpost: [Malicious Mods and you](https://github.com/knah/VRCMods/edit/master/Malicious-Mods.md)
 
