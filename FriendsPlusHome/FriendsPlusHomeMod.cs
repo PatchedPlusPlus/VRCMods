@@ -11,9 +11,9 @@ using UnhollowerRuntimeLib.XrefScans;
 using UnityEngine;
 using VRC.Core;
 
-[assembly:MelonInfo(typeof(FriendsPlusHomeMod), "Friends+ Home", "1.1.2", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
-[assembly:MelonGame("VRChat", "VRChat")]
-[assembly:MelonOptionalDependencies("UIExpansionKit")]
+[assembly: MelonInfo(typeof(FriendsPlusHomeMod), "Friends+ Home", "1.1.2", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
+[assembly: MelonGame("VRChat", "VRChat")]
+[assembly: MelonOptionalDependencies("UIExpansionKit")]
 
 namespace FriendsPlusHome
 {
@@ -25,8 +25,6 @@ namespace FriendsPlusHome
 
         private static MelonPreferences_Entry<string> StartupName;
         private static MelonPreferences_Entry<string> ButtonName;
-
-
 
         private static Func<VRCUiManager> ourGetUiManager;
         private static Func<QuickMenu> ourGetQuickMenu;
@@ -45,7 +43,6 @@ namespace FriendsPlusHome
 
         internal static VRCUiManager GetUiManager() => ourGetUiManager();
         internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
-
 
         public override void OnApplicationStart()
         {
@@ -70,11 +67,13 @@ namespace FriendsPlusHome
 
             DoAfterUiManagerInit(OnUiManagerInit);
         }
-        private static void DoAfterUiManagerInit(Action code) {
+        private static void DoAfterUiManagerInit(Action code)
+        {
             MelonCoroutines.Start(OnUiManagerInitCoro(code));
         }
 
-        private static IEnumerator OnUiManagerInitCoro(Action code) {
+        private static IEnumerator OnUiManagerInitCoro(Action code)
+        {
             while (VRCUiManager.prop_VRCUiManager_0 == null)
                 yield return null;
             code();
@@ -88,7 +87,7 @@ namespace FriendsPlusHome
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static void RegisterUix2Extension()
         {
-            var possibleValues = new []
+            var possibleValues = new[]
             {
                 (nameof(InstanceAccessType.Public), "Public"),
                 (nameof(InstanceAccessType.FriendsOfGuests), "Friends+"),

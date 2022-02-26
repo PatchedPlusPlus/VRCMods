@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Finitizer;
@@ -7,11 +8,9 @@ using MelonLoader;
 using UnhollowerBaseLib;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using System.Linq;
 
-
-[assembly:MelonInfo(typeof(FinitizerMod), "Finitizer", "1.3.1", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
-[assembly:MelonGame("VRChat", "VRChat")]
+[assembly: MelonInfo(typeof(FinitizerMod), "Finitizer", "1.3.1", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
+[assembly: MelonGame("VRChat", "VRChat")]
 
 namespace Finitizer
 {
@@ -26,8 +25,6 @@ namespace Finitizer
 
         private bool myArePatchesApplied;
         private bool myWasEnabled;
-
-
 
         private static Func<VRCUiManager> ourGetUiManager;
         private static Func<QuickMenu> ourGetQuickMenu;
@@ -47,8 +44,6 @@ namespace Finitizer
         internal static VRCUiManager GetUiManager() => ourGetUiManager();
         internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
 
-
-
         public override void OnApplicationStart()
         {
             var category = MelonPreferences.CreateCategory(SettingsCategory, SettingsCategory);
@@ -60,7 +55,6 @@ namespace Finitizer
 
             OnModSettingsApplied(entry.Value);
         }
-
 
         private void OnModSettingsApplied(bool isEnabled)
         {
@@ -127,7 +121,7 @@ namespace Finitizer
 
         private static readonly Dictionary<string, (IntPtr, IntPtr)> ourOriginalPointers = new Dictionary<string, (IntPtr, IntPtr)>();
 
-        private static unsafe void PatchICall<T>(string name, out T original, string patchName) where T: MulticastDelegate
+        private static unsafe void PatchICall<T>(string name, out T original, string patchName) where T : MulticastDelegate
         {
             var originalPointer = IL2CPP.il2cpp_resolve_icall(name);
             if (originalPointer == IntPtr.Zero)
@@ -140,7 +134,7 @@ namespace Finitizer
             var target = typeof(FinitizerMod).GetMethod(patchName, BindingFlags.Static | BindingFlags.NonPublic);
             var functionPointer = target!.MethodHandle.GetFunctionPointer();
 
-            MelonUtils.NativeHookAttach((IntPtr) (&originalPointer), functionPointer);
+            MelonUtils.NativeHookAttach((IntPtr)(&originalPointer), functionPointer);
 
             ourOriginalPointers[name] = (originalPointer, functionPointer);
 
@@ -154,7 +148,7 @@ namespace Finitizer
             foreach (var keyValuePair in ourOriginalPointers)
             {
                 var pointer = keyValuePair.Value.Item1;
-                MelonUtils.NativeHookDetach((IntPtr) (&pointer), keyValuePair.Value.Item2);
+                MelonUtils.NativeHookDetach((IntPtr)(&pointer), keyValuePair.Value.Item2);
             }
 
             ourOriginalPointers.Clear();
@@ -163,7 +157,7 @@ namespace Finitizer
             MelonLogger.Msg("Things unpatching complete");
         }
 
-        public static unsafe bool IsInvalid(float f) => (*(int*) &f & int.MaxValue) >= 2139095040;
+        public static unsafe bool IsInvalid(float f) => (*(int*)&f & int.MaxValue) >= 2139095040;
 
         private static unsafe void SetTransformVectorPatch(IntPtr instance, Vector3* vector)
         {
@@ -177,7 +171,7 @@ namespace Finitizer
 
         private static unsafe void SetTransformQuaternionPatch(IntPtr instance, Quaternion* quat)
         {
-            if(!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
+            if (!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
                !(quat->y > MaxAllowedValueBottom && quat->y < MaxAllowedValueTop) ||
                !(quat->z > MaxAllowedValueBottom && quat->z < MaxAllowedValueTop) ||
                !(quat->w > MaxAllowedValueBottom && quat->w < MaxAllowedValueTop))
@@ -198,7 +192,7 @@ namespace Finitizer
             if (!(vector->y > MaxAllowedValueBottom && vector->y < MaxAllowedValueTop)) vector->y = 0f;
             if (!(vector->z > MaxAllowedValueBottom && vector->z < MaxAllowedValueTop)) vector->z = 0f;
 
-            if(!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
+            if (!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
                !(quat->y > MaxAllowedValueBottom && quat->y < MaxAllowedValueTop) ||
                !(quat->z > MaxAllowedValueBottom && quat->z < MaxAllowedValueTop) ||
                !(quat->w > MaxAllowedValueBottom && quat->w < MaxAllowedValueTop))
@@ -224,7 +218,7 @@ namespace Finitizer
 
         private static unsafe void SetRigidbodyRotPatch(IntPtr instance, Quaternion* quat)
         {
-            if(!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
+            if (!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
                !(quat->y > MaxAllowedValueBottom && quat->y < MaxAllowedValueTop) ||
                !(quat->z > MaxAllowedValueBottom && quat->z < MaxAllowedValueTop) ||
                !(quat->w > MaxAllowedValueBottom && quat->w < MaxAllowedValueTop))
@@ -250,7 +244,7 @@ namespace Finitizer
 
         private static unsafe void SetRigidbodyRotMovePatch(IntPtr instance, Quaternion* quat)
         {
-            if(!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
+            if (!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
                !(quat->y > MaxAllowedValueBottom && quat->y < MaxAllowedValueTop) ||
                !(quat->z > MaxAllowedValueBottom && quat->z < MaxAllowedValueTop) ||
                !(quat->w > MaxAllowedValueBottom && quat->w < MaxAllowedValueTop))
@@ -291,7 +285,7 @@ namespace Finitizer
             if (!(vector->y > MaxAllowedValueBottom && vector->y < MaxAllowedValueTop)) vector->y = 0f;
             if (!(vector->z > MaxAllowedValueBottom && vector->z < MaxAllowedValueTop)) vector->z = 0f;
 
-            if(!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
+            if (!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
                !(quat->y > MaxAllowedValueBottom && quat->y < MaxAllowedValueTop) ||
                !(quat->z > MaxAllowedValueBottom && quat->z < MaxAllowedValueTop) ||
                !(quat->w > MaxAllowedValueBottom && quat->w < MaxAllowedValueTop))
@@ -312,7 +306,7 @@ namespace Finitizer
             if (!(vector->y > MaxAllowedValueBottom && vector->y < MaxAllowedValueTop)) vector->y = 0f;
             if (!(vector->z > MaxAllowedValueBottom && vector->z < MaxAllowedValueTop)) vector->z = 0f;
 
-            if(!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
+            if (!(quat->x > MaxAllowedValueBottom && quat->x < MaxAllowedValueTop) ||
                !(quat->y > MaxAllowedValueBottom && quat->y < MaxAllowedValueTop) ||
                !(quat->z > MaxAllowedValueBottom && quat->z < MaxAllowedValueTop) ||
                !(quat->w > MaxAllowedValueBottom && quat->w < MaxAllowedValueTop))

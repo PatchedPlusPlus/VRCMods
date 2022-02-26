@@ -16,8 +16,8 @@ using VRC.Core;
 using VRC.Management;
 using Object = UnityEngine.Object;
 
-[assembly:MelonInfo(typeof(JoinNotifierMod), "JoinNotifier", "1.0.6", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
-[assembly:MelonGame("VRChat", "VRChat")]
+[assembly: MelonInfo(typeof(JoinNotifierMod), "JoinNotifier", "1.0.6", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
+[assembly: MelonGame("VRChat", "VRChat")]
 
 namespace JoinNotifier
 {
@@ -46,8 +46,6 @@ namespace JoinNotifier
 
         private AudioMixerGroup myUIGroup;
 
-
-
         private static Func<VRCUiManager> ourGetUiManager;
         private static Func<QuickMenu> ourGetQuickMenu;
 
@@ -65,8 +63,6 @@ namespace JoinNotifier
 
         internal static VRCUiManager GetUiManager() => ourGetUiManager();
         internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
-
-
 
         public override void OnApplicationStart()
         {
@@ -98,7 +94,7 @@ namespace JoinNotifier
             NetworkManagerHooks.Initialize();
 
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("JoinNotifier.joinnotifier.assetbundle"))
-            using (var tempStream = new MemoryStream((int) stream.Length))
+            using (var tempStream = new MemoryStream((int)stream.Length))
             {
                 stream.CopyTo(tempStream);
 
@@ -150,7 +146,8 @@ namespace JoinNotifier
             JoinNotifierSettings.SoundVolume.OnValueChanged += (_, _) => ApplySoundSettings();
             JoinNotifierSettings.UseUiMixer.OnValueChanged += (_, _) => ApplySoundSettings();
             JoinNotifierSettings.TextSize.OnValueChanged += (_, _) => ApplyFontSize();
-            JoinNotifierSettings.JoinIconColor.OnValueChanged += (_, _) => {
+            JoinNotifierSettings.JoinIconColor.OnValueChanged += (_, _) =>
+            {
                 if (myJoinImage != null) myJoinImage.color = JoinNotifierSettings.GetJoinIconColor();
             };
             JoinNotifierSettings.LeaveIconColor.OnValueChanged += (_, _) =>
@@ -243,7 +240,7 @@ namespace JoinNotifier
             }
 
             MelonDebug.Msg("Creating gameobjects");
-//            var pathToThing = "UserInterface/UnscaledUI/HudContent/Hud/NotificationDotParent/NotificationDot";
+            //            var pathToThing = "UserInterface/UnscaledUI/HudContent/Hud/NotificationDotParent/NotificationDot";
             myJoinImage = CreateNotifierImage("join", 0f, JoinNotifierSettings.GetJoinIconColor());
             myJoinSource = CreateAudioSource(myJoinClip, myJoinImage.gameObject);
             myJoinText = CreateTextNear(myJoinImage, 110f, TextAnchor.LowerRight);
@@ -285,12 +282,12 @@ namespace JoinNotifier
             if (JoinNotifierSettings.ShouldBlinkIcon(true))
                 MelonCoroutines.Start(BlinkIconCoroutine(myJoinImage));
             if (JoinNotifierSettings.ShouldPlaySound(true))
-               myJoinSource.Play();
+                myJoinSource.Play();
             if (JoinNotifierSettings.ShouldShowNames(true))
                 MelonCoroutines.Start(ShowName(myJoinText, myJoinNames, playerName, true, isFriendsWith));
             if (JoinNotifierSettings.LogToConsole.Value)
                 MelonLogger.Msg(isFriendsWith && JoinNotifierSettings.ShowFriendsInDifferentColor.Value
-                        ? ConsoleColor.DarkYellow : ConsoleColor.DarkCyan, 
+                        ? ConsoleColor.DarkYellow : ConsoleColor.DarkCyan,
                     $"{(isFriendsWith ? "Friend " : "")}{playerName} joined");
         }
 
@@ -318,7 +315,7 @@ namespace JoinNotifier
                 MelonCoroutines.Start(ShowName(myLeaveText, myLeaveNames, playerName, false, isFriendsWith));
             if (JoinNotifierSettings.LogToConsole.Value)
                 MelonLogger.Msg(isFriendsWith && JoinNotifierSettings.ShowFriendsInDifferentColor.Value
-                        ? ConsoleColor.DarkYellow : ConsoleColor.DarkMagenta, 
+                        ? ConsoleColor.DarkYellow : ConsoleColor.DarkMagenta,
                     $"{(isFriendsWith ? "Friend " : "")}{playerName} left");
         }
 
@@ -341,7 +338,7 @@ namespace JoinNotifier
 
         private static string RenderHex(Color color)
         {
-            return $"#{(int) (color.r * 255):X2}{(int) (color.g * 255):X2}{(int) (color.b * 255):X2}{(int) (color.a * 255):X2}";
+            return $"#{(int)(color.r * 255):X2}{(int)(color.g * 255):X2}{(int)(color.b * 255):X2}{(int)(color.a * 255):X2}";
         }
 
         public IEnumerator BlinkIconCoroutine(Image imageToBlink)

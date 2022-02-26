@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using MelonLoader;
 using ParticleAndBoneLimiterSettings;
+using TMPro;
 using UIExpansionKit;
 using UIExpansionKit.API;
 using UnhollowerRuntimeLib;
@@ -13,7 +14,7 @@ using VRC.Core;
 using Object = UnityEngine.Object;
 
 [assembly: MelonGame("VRChat", "VRChat")]
-[assembly: MelonInfo(typeof(ParticleAndBoneLimiterSettingsMod), "Particle and DynBone limiter settings UI", "1.1.4", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
+[assembly: MelonInfo(typeof(ParticleAndBoneLimiterSettingsMod), "Particle and DynBone limiter settings UI", "1.1.5", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
 
 namespace ParticleAndBoneLimiterSettings
 {
@@ -21,8 +22,6 @@ namespace ParticleAndBoneLimiterSettings
     {
         private const string SettingsCategory = "VrcParticleLimiter";
         private static bool ourIsExpanded;
-
-
 
         private static Func<VRCUiManager> ourGetUiManager;
         private static Func<QuickMenu> ourGetQuickMenu;
@@ -61,7 +60,7 @@ namespace ParticleAndBoneLimiterSettings
             var prefabs = CustomParticleSettingsUiHandler.UixBundle = ExpansionKitApi.GetUiExpansionKitBundleContents();
 
             var rootPrefab = Object.Instantiate(prefabs.SettingsCategory, prefabs.StoredThingsParent.transform, false);
-            rootPrefab.GetComponentInChildren<Text>().text = MelonPreferences.GetCategory(SettingsCategory).DisplayName;
+            rootPrefab.GetComponentInChildren<TMP_Text>().text = MelonPreferences.GetCategory(SettingsCategory).DisplayName;
             rootPrefab.SetActive(true);
             rootPrefab.AddComponent<CustomParticleSettingsUiHandler>();
 
@@ -95,11 +94,11 @@ namespace ParticleAndBoneLimiterSettings
             var categoryUiContent = categoryUi.transform.Find("CategoryEntries");
             var expandButtonTransform = categoryUi.transform.Find("ExpandButton");
             var expandButton = expandButtonTransform.GetComponent<Button>();
-            var expandButtonText = expandButtonTransform.GetComponentInChildren<Text>();
+            var expandIcon = expandButtonTransform.Find("Image");
 
             void SetExpanded(bool expanded)
             {
-                expandButtonText.text = expanded ? "^" : "V";
+                expandIcon.localEulerAngles = expanded ? Vector3.zero : new Vector3(0, 0, 180);
                 categoryUiContent.gameObject.SetActive(expanded);
             }
 
@@ -113,7 +112,7 @@ namespace ParticleAndBoneLimiterSettings
             var textPrefab = CustomParticleSettingsUiHandler.UixBundle.SettingsText;
 
             var boolSetting = Object.Instantiate(CustomParticleSettingsUiHandler.UixBundle.SettingsBool, categoryUiContent, false);
-            boolSetting.GetComponentInChildren<Text>().text = "Enable particle limiter (restart required)";
+            boolSetting.GetComponentInChildren<TMP_Text>().text = "Enable particle limiter (restart required)";
             var mainToggle = boolSetting.transform.Find("Toggle").GetComponent<Toggle>();
             var localConfig = ConfigManager.LocalConfig.Cast<LocalConfig>();
             mainToggle.isOn = localConfig.GetList("betas").Contains("particle_system_limiter");
@@ -129,7 +128,7 @@ namespace ParticleAndBoneLimiterSettings
                         list.Remove("particle_system_limiter");
 
                     var newList = new Il2CppSystem.Collections.Generic.List<Il2CppSystem.Object>();
-                    foreach (var s in list) newList.Add((Il2CppSystem.String) s);
+                    foreach (var s in list) newList.Add((Il2CppSystem.String)s);
                     localConfig.SetValue("betas", newList);
                 }));
             var pinToggle = boolSetting.transform.Find("PinToggle");
@@ -142,14 +141,14 @@ namespace ParticleAndBoneLimiterSettings
                 var defaultValue = valuePair.defaultValue;
 
                 var textSetting = Object.Instantiate(textPrefab, categoryUiContent, false);
-                textSetting.GetComponentInChildren<Text>().text = prefDesc;
-                var textField = textSetting.GetComponentInChildren<InputField>();
+                textSetting.GetComponentInChildren<TMP_Text>().text = prefDesc;
+                var textField = textSetting.GetComponentInChildren<TMP_InputField>();
                 textField.text = localConfig.GetInt(prefId, defaultValue).ToString();
-                textField.contentType = InputField.ContentType.IntegerNumber;
+                textField.contentType = TMP_InputField.ContentType.IntegerNumber;
                 textField.onValueChanged.AddListener(new Action<string>(value =>
                 {
                     int parsedValue;
-                    if(int.TryParse(textField.text, out parsedValue))
+                    if (int.TryParse(textField.text, out parsedValue))
                         localConfig.SetValue(prefId, new Il2CppSystem.Double { m_value = parsedValue }.BoxIl2CppObject());
                 }));
                 textSetting.GetComponentInChildren<Button>().onClick.AddListener(new Action(() =>
@@ -161,9 +160,9 @@ namespace ParticleAndBoneLimiterSettings
             }
 
             var reloadButton = Object.Instantiate(CustomParticleSettingsUiHandler.UixBundle.QuickMenuButton, categoryUiContent, false);
-            var reloadButtonText = reloadButton.GetComponentInChildren<Text>();
+            var reloadButtonText = reloadButton.GetComponentInChildren<TMP_Text>();
             reloadButtonText.text = "Click to apply limits and reload all avatars (particle limits need world rejoin)";
-            reloadButtonText.resizeTextMaxSize = reloadButtonText.resizeTextMaxSize * 15 / 10;
+            reloadButtonText.fontSizeMax = reloadButtonText.fontSizeMax * 15 / 10;
             reloadButtonText.fontSize = reloadButtonText.fontSize * 15 / 10;
             reloadButton.GetComponent<Button>().onClick.AddListener(new Action(() =>
             {
@@ -172,7 +171,8 @@ namespace ParticleAndBoneLimiterSettings
             }));
         }
 
-        private static void ReloadAllAvatars() {
+        private static void ReloadAllAvatars()
+        {
             // reloadAllAvatars
             var vrcPlayer = VRCPlayer.field_Internal_Static_VRCPlayer_0;
             vrcPlayer.StartCoroutine(vrcPlayer.Method_Private_IEnumerator_Boolean_PDM_0(false));

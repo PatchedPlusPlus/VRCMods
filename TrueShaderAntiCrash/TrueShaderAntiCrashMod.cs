@@ -14,8 +14,8 @@ using UIExpansionKit.API;
 using UnityEngine.SceneManagement;
 using VRC.Core;
 
-[assembly:MelonInfo(typeof(TrueShaderAntiCrashMod), "True Shader Anticrash", "1.0.6", "knah, PatchedPlus+", "https://github.com/knah/VRCMods")]
-[assembly:MelonGame("VRChat", "VRChat")]
+[assembly: MelonInfo(typeof(TrueShaderAntiCrashMod), "True Shader Anticrash", "1.0.6", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
+[assembly: MelonGame("VRChat", "VRChat")]
 
 namespace TrueShaderAntiCrash
 {
@@ -29,8 +29,6 @@ namespace TrueShaderAntiCrash
             { "ccZ4F7iE7a78kWdXdMekJzP7/ktzS5jOOS8IOITxa1C5Jg2TKxC0/ywY8F0o9I1vZHsxAO4eh7G2sOGzsR/+uQ==", 0x79CEE0 }, // U2019.4.30 non-dev
             { "sgZUlX3+LSHKnTiTC+nXNcdtLOTrAB1fNjBLOwDdKzCyndlFLAdL0udR4S1szTC/q5pnFhG3Kdspsj5jvwLY1A==", 0x79F070 }, // U2019.4.31 non-dev
         };
-
-
 
         private static Func<VRCUiManager> ourGetUiManager;
         private static Func<QuickMenu> ourGetQuickMenu;
@@ -50,12 +48,10 @@ namespace TrueShaderAntiCrash
         internal static VRCUiManager GetUiManager() => ourGetUiManager();
         internal static QuickMenu GetQuickMenu() => ourGetQuickMenu();
 
-
-
         public override void OnApplicationStart()
         {
             //if (!CheckWasSuccessful || !MustStayTrue || MustStayFalse) return;
-            
+
             string unityPlayerHash;
             {
                 using var sha = SHA512.Create();
@@ -69,7 +65,7 @@ namespace TrueShaderAntiCrash
                 MelonLogger.Error("The mod will not work");
                 return;
             }
-            
+
             var pluginsPath = MelonUtils.GetGameDataDirectory() + "/Plugins";
             var deeperPluginsPath = Path.Combine(pluginsPath, "x86_64");
             if (Directory.Exists(deeperPluginsPath)) pluginsPath = deeperPluginsPath;
@@ -93,7 +89,7 @@ namespace TrueShaderAntiCrash
             foreach (ProcessModule module in process.Modules)
             {
                 if (!module.FileName.Contains("UnityPlayer")) continue;
-                
+
                 var loadLibraryAddress = module.BaseAddress + offset;
                 var dg = Marshal.GetDelegateForFunctionPointer<FindAndLoadUnityPlugin>(loadLibraryAddress);
 
