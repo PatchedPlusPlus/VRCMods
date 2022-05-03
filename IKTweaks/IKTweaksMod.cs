@@ -20,7 +20,7 @@ using Object = UnityEngine.Object;
 using Delegate = Il2CppSystem.Delegate;
 using System.Collections;
 
-[assembly:MelonInfo(typeof(IKTweaksMod), "IKTweaks", "1.0.24", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(IKTweaksMod), "IKTweaks", "1.0.25", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 [assembly:MelonOptionalDependencies("UIExpansionKit")]
 
@@ -79,9 +79,9 @@ namespace IKTweaks
 
             VrIkHandling.HookVrIkInit(HarmonyInstance);
             FullBodyHandling.HookFullBodyController(HarmonyInstance);
-
+            
             Camera.onPreRender = Delegate.Combine(Camera.onPreRender, (Camera.CameraCallback) OnVeryLateUpdate).Cast<Camera.CameraCallback>();
-
+            
             DoAfterUiManagerInit(OnUiManagerInit);
 
             ourGetEyeHeightDelegate = (Func<VRCAvatarManager, float>) System.Delegate.CreateDelegate(typeof(Func<VRCAvatarManager, float>), typeof(VRCAvatarManager)
@@ -346,7 +346,7 @@ namespace IKTweaks
         public void OnVeryLateUpdate(Camera _)
         {
             if (ourHadUpdateThisFrame) return;
-
+            
             ourHadUpdateThisFrame = true;
 
             ProcessQueue(ourToMainThreadQueue);
