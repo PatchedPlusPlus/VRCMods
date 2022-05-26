@@ -16,8 +16,8 @@ using VRC.Core;
 using VRC.Management;
 using Object = UnityEngine.Object;
 
-[assembly: MelonInfo(typeof(JoinNotifierMod), "JoinNotifier", "1.0.6", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
-[assembly: MelonGame("VRChat", "VRChat")]
+[assembly:MelonInfo(typeof(JoinNotifierMod), "JoinNotifier", "1.0.7", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
+[assembly:MelonGame("VRChat", "VRChat")]
 
 namespace JoinNotifier
 {
@@ -179,7 +179,7 @@ namespace JoinNotifier
 
         private Image CreateNotifierImage(string name, float offset, Color colorTint)
         {
-            var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud");
+            var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud");
             var requestedParent = hudRoot.transform.Find("NotificationDotParent");
             var indicator = Object.Instantiate(hudRoot.transform.Find("NotificationDotParent/NotificationDot").gameObject, requestedParent, false).Cast<GameObject>();
             indicator.name = "NotifyDot-" + name;
@@ -232,7 +232,7 @@ namespace JoinNotifier
         {
             if (myJoinImage != null) return;
 
-            var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud");
+            var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud");
             if (hudRoot == null)
             {
                 MelonLogger.Msg("Not creating gameobjects - no hud root");
@@ -240,7 +240,7 @@ namespace JoinNotifier
             }
 
             MelonDebug.Msg("Creating gameobjects");
-            //            var pathToThing = "UserInterface/UnscaledUI/HudContent/Hud/NotificationDotParent/NotificationDot";
+//            var pathToThing = "UserInterface/UnscaledUI/HudContent_Old/Hud/NotificationDotParent/NotificationDot";
             myJoinImage = CreateNotifierImage("join", 0f, JoinNotifierSettings.GetJoinIconColor());
             myJoinSource = CreateAudioSource(myJoinClip, myJoinImage.gameObject);
             myJoinText = CreateTextNear(myJoinImage, 110f, TextAnchor.LowerRight);

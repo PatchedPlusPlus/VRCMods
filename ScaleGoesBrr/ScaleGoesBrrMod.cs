@@ -11,7 +11,7 @@ using UnhollowerRuntimeLib;
 using UnityEngine;
 using VRC.SDKBase;
 
-[assembly:MelonInfo(typeof(ScaleGoesBrrMod), "Scale Goes Brr", "1.0", "knah", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(ScaleGoesBrrMod), "Scale Goes Brr", "1.1.1", "knah", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace ScaleGoesBrr
@@ -39,6 +39,7 @@ namespace ScaleGoesBrr
 
         private static MelonPreferences_Entry<bool> ourIsEnabled;
         private static MelonPreferences_Entry<bool> ourFixFlyOff;
+        internal static MelonPreferences_Entry<bool> FixPlayspaceCenterBias;
 
         private static VRCVrCameraSteam ourSteamCamera;
         private static Transform ourCameraTransform;
@@ -69,6 +70,7 @@ namespace ScaleGoesBrr
 
             var category = MelonPreferences.CreateCategory("ScaleGoesBrr", "Scale Goes Brr");
             ourIsEnabled = category.CreateEntry("Enabled", true, "Enable avatar scaling support");
+            FixPlayspaceCenterBias = category.CreateEntry("FixPlayspaceCenterBias", true, "Scale towards avatar root (not playspace center)");
             ourFixFlyOff = category.CreateEntry("FixFlyOff", true, "Fix avatar root flying off");
         
             HarmonyInstance.Patch(typeof(VRCPlayer).GetMethod(nameof(VRCPlayer.Start)),
@@ -135,12 +137,12 @@ namespace ScaleGoesBrr
             var uiRoot = GameObject.Find("/UserInterface").transform;
             var unscaledUi = uiRoot.Find("UnscaledUI");
             
-            // give it 10 frames for VRCTrackingManager to unbamboozle itself
+            // give it 3 frames for VRCTrackingManager to unbamboozle itself
             for (var i = 0; i < 3 && go != null; i++)
             {
-                MelonLogger.Msg($"Funny numbers go brr: {i} {VRCTrackingManager.field_Private_Static_Vector3_0.ToString()} {VRCTrackingManager.field_Private_Static_Vector3_1.ToString()}");
-                MelonLogger.Msg($"Scale stuff: a={go.transform.localScale.y} t={trackingRoot.localScale.y}");
-                MelonLogger.Msg($"UI stuff: r={uiRoot.localScale.y} u={unscaledUi.localScale.y}");
+                MelonDebug.Msg($"Funny numbers go brr: {i} {VRCTrackingManager.field_Private_Static_Vector3_0.ToString()} {VRCTrackingManager.field_Private_Static_Vector3_1.ToString()}");
+                MelonDebug.Msg($"Scale stuff: a={go.transform.localScale.y} t={trackingRoot.localScale.y}");
+                MelonDebug.Msg($"UI stuff: r={uiRoot.localScale.y} u={unscaledUi.localScale.y}");
                 yield return null;
             }
 
@@ -175,6 +177,8 @@ namespace ScaleGoesBrr
             comp.amSingle3 = avatarManager.field_Private_Single_3;
             comp.amSingle4 = avatarManager.field_Private_Single_4;
             comp.amSingle5 = avatarManager.field_Private_Single_5;
+            comp.amSingle6 = avatarManager.field_Private_Single_6;
+            comp.amSingle7 = avatarManager.field_Private_Single_7;
 
             comp.targetVp = avatarManager.field_Private_VRC_AnimationController_0
                 .GetComponentInChildren<IKHeadAlignment>().transform;

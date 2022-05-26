@@ -20,7 +20,7 @@ using VRCSDK2;
 using Object = UnityEngine.Object;
 using QuickMenuNew = VRC.UI.Elements.QuickMenu;
 
-[assembly:MelonInfo(typeof(UiExpansionKitMod), "UI Expansion Kit", "1.0.1", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(UiExpansionKitMod), "UI Expansion Kit", "1.0.2", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 
 namespace UIExpansionKit
@@ -234,7 +234,7 @@ namespace UIExpansionKit
             var quickMenuRoot = GetQuickMenu().transform.Find("Container").gameObject;
 
             var fullMenuExpandoPrefab = myStuffBundle.BigMenuExpando;
-            var fullMenuRoot = GetUiManager().field_Public_GameObject_0;
+            var fullMenuRoot = UnityUtils.FindInactiveObjectInActiveRoot("UserInterface/MenuContent");
 
             var qmExpandosRootGo = new GameObject("UIX QM Expandos Root", new[] { Il2CppType.Of<RectTransform>() });
             myQmExpandosRoot = qmExpandosRootGo.transform;
@@ -489,7 +489,7 @@ namespace UIExpansionKit
 
         private void DecorateFullMenu()
         {
-            var fullMenuRoot = GetUiManager().field_Public_GameObject_0;
+            var fullMenuRoot = UnityUtils.FindInactiveObjectInActiveRoot("UserInterface/MenuContent");
             //CheckC();
 
             var settingsExpandoPrefab = myStuffBundle.SettingsMenuExpando;

@@ -20,7 +20,7 @@ using Object = UnityEngine.Object;
 using Delegate = Il2CppSystem.Delegate;
 using System.Collections;
 
-[assembly:MelonInfo(typeof(IKTweaksMod), "IKTweaks", "1.0.25", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
+[assembly:MelonInfo(typeof(IKTweaksMod), "IKTweaks", "1.0.26", "knah, P a t c h e d   P l u s +", "https://github.com/knah/VRCMods")]
 [assembly:MelonGame("VRChat", "VRChat")]
 [assembly:MelonOptionalDependencies("UIExpansionKit")]
 
@@ -321,9 +321,8 @@ namespace IKTweaks
             // only one of them is the correct type, so just try all of them
             steamVrControllerManager.field_Private_Action_0.TryCast<SteamVR_Events.Action<VREvent_t>>()?.action?.Invoke(new VREvent_t());
             steamVrControllerManager.field_Private_Action_1.TryCast<SteamVR_Events.Action<VREvent_t>>()?.action?.Invoke(new VREvent_t());
-            steamVrControllerManager.field_Private_Action_2.TryCast<SteamVR_Events.Action<VREvent_t>>()?.action?.Invoke(new VREvent_t());
 
-            myAfkIcon = GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud/AFK").transform.Find("Icon").gameObject;
+            myAfkIcon = GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud/AFK").transform.Find("Icon").gameObject;
         }
 
         public static bool IsAfk { get; private set; }
