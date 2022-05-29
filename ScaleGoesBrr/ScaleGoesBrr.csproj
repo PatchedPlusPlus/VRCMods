@@ -4,7 +4,7 @@
         <TargetFramework>net48</TargetFramework>
         <VrcReferences>true</VrcReferences>
         <DebugType>none</DebugType>
-        <Version>1.1.1.0</Version>
+        <Version>1.1.2.0</Version>
     </PropertyGroup>
 
 </Project>
