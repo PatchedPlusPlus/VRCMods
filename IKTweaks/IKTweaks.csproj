@@ -12,6 +12,40 @@
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="FinalIK\Class1.cs" />
+    <Compile Remove="FinalIK\IKSolver.cs" />
+    <Compile Remove="FinalIK\IKSolverVR.cs" />
+    <Compile Remove="FinalIK\IKSolverVRArm.cs" />
+    <Compile Remove="FinalIK\IKSolverVRBodyPart.cs" />
+    <Compile Remove="FinalIK\IKSolverVRFootstep.cs" />
+    <Compile Remove="FinalIK\IKSolverVRLeg.cs" />
+    <Compile Remove="FinalIK\IKSolverVRLocomotion.cs" />
+    <Compile Remove="FinalIK\IKSolverVRSpine.cs" />
+    <Compile Remove="FinalIK\IKSolverVRUtilities.cs" />
+    <Compile Remove="FinalIK\TwistRelaxer.cs" />
+    <Compile Remove="FinalIK\TwistSolver.cs" />
+    <Compile Remove="FinalIK\VRIK.cs" />
+    <Compile Remove="FinalIK\VRIKCalibrator.cs" />
+    <Compile Remove="FinalIK\VRIKRootController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FinalIK\Class1.cs" />
+    <None Include="FinalIK\IKSolver.cs" />
+    <None Include="FinalIK\IKSolverVR.cs" />
+    <None Include="FinalIK\IKSolverVRArm.cs" />
+    <None Include="FinalIK\IKSolverVRBodyPart.cs" />
+    <None Include="FinalIK\IKSolverVRFootstep.cs" />
+    <None Include="FinalIK\IKSolverVRLeg.cs" />
+    <None Include="FinalIK\IKSolverVRLocomotion.cs" />
+    <None Include="FinalIK\IKSolverVRSpine.cs" />
+    <None Include="FinalIK\IKSolverVRUtilities.cs" />
+    <None Include="FinalIK\TwistRelaxer.cs" />
+    <None Include="FinalIK\TwistSolver.cs" />
+    <None Include="FinalIK\VRIK.cs" />
+    <None Include="FinalIK\VRIKCalibrator.cs" />
+    <None Include="FinalIK\VRIKRootController.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\UIExpansionKit\UIExpansionKit.csproj" />
   </ItemGroup>
 </Project>
